@@ -1,0 +1,94 @@
+# depslib dependency file v1.0
+1070210298 source:c:\users\marshall\desktop\cpp\winbgim\bgi.cxx
+	<cstdlib>
+	<string>
+	<iostream>
+
+1713795295 source:c:\users\marshall\desktop\cpp\winbgim\bgiout.cxx
+	<sstream>
+
+1070135150 source:c:\users\marshall\desktop\cpp\winbgim\dibutil.cxx
+	<windows.h>
+	<assert.h>
+	"dibapi.h"
+	"dibutil.h"
+	<stdio.h>
+
+1070199518 c:\users\marshall\desktop\cpp\winbgim\dibapi.h
+
+1070130552 c:\users\marshall\desktop\cpp\winbgim\dibutil.h
+
+1151890230 source:c:\users\marshall\desktop\cpp\winbgim\file.cxx
+	<windows.h>
+	<string.h>
+	<stdio.h>
+	<math.h>
+	<io.h>
+	<direct.h>
+	<stdlib.h>
+	"dibutil.h"
+	"dibapi.h"
+	"winbgitypes.h"
+
+1151538086 c:\users\marshall\desktop\cpp\winbgim\winbgitypes.h
+	<windows.h>
+	<tchar.h>
+	<queue>
+	<string>
+	"winbgim.h"
+	<vector>
+
+1713795389 c:\users\marshall\desktop\cpp\winbgim\winbgim.h
+	<windows.h>
+	<limits.h>
+	<sstream>
+
+1713795476 source:c:\users\marshall\desktop\cpp\winbgim\drawing.cxx
+	<windows.h>
+	<windowsx.h>
+	<math.h>
+	<ocidl.h>
+	<olectl.h>
+	<string.h>
+	"winbgim.h"
+	"winbgitypes.h"
+	"dibapi.h"
+	<iostream>
+
+1713795576 source:c:\users\marshall\desktop\cpp\winbgim\misc.cxx
+	<windows.h>
+	<windowsx.h>
+	"winbgim.h"
+	"winbgitypes.h"
+	<iostream>
+
+1151542584 source:c:\users\marshall\desktop\cpp\winbgim\mouse.cxx
+	<windows.h>
+	<windowsx.h>
+	"winbgim.h"
+	"winbgitypes.h"
+
+1151542608 source:c:\users\marshall\desktop\cpp\winbgim\palette.cxx
+	<windows.h>
+	<windowsx.h>
+	"winbgim.h"
+	"winbgitypes.h"
+
+1151542626 source:c:\users\marshall\desktop\cpp\winbgim\text.cxx
+	<windows.h>
+	<windowsx.h>
+	<iostream>
+	<sstream>
+	<string>
+	"winbgim.h"
+	"winbgitypes.h"
+
+1151542638 source:c:\users\marshall\desktop\cpp\winbgim\winbgi.cxx
+	<windows.h>
+	<windowsx.h>
+	<stdio.h>
+	<iostream>
+	<vector>
+	"winbgim.h"
+	"winbgitypes.h"
+

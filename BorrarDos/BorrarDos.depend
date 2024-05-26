@@ -1,0 +1,8 @@
+# depslib dependency file v1.0
+1716683521 source:c:\users\marshall abadeer\desktop\lenguagesprogramacion\borrardos\main.cpp
+	<iostream>
+	<winbgim.h>
+	<math.h>
+	<list>
+	<vector>
+

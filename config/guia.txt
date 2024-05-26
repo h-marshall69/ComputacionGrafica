@@ -1,0 +1,11 @@
+Configure winbgim library in Codeblocks.
+Create a folder in any directory and give the name "WinBGIm" and create include and lib folder inside it. (eg. c:\WinBGIm\include and c:\WinBGIm\lib).
+From the project created above, copy "graphics.h" and "winbgim.h" header files and paste it inside include directory, and "libbgi.a" file from bin/release project folder and paste it inside lib directory that you have created in step 2. (eg. c:\WinBGIm\include and c:\WinBGIm\lib). 
+Open the code::blocks and go to File -> New -> Project or click create a new project link from the start page.
+From the project wizard select "empty project" and click "Go" button and provide all necessary information. 
+Also, do not forget to  add main.cpp file.
+Go to menu bar and select project-> Project properties. A dialogue box will appear and click "Project's build options". 
+Another dialogue box will appear and click the "Search directories" tab. Under "Compiler" tab provide the path of WinBGIm include folder (e.g. c:\WinBGIm\include) and under "Linker" tab provide the path of WinBGIm lib folder (e.g. c:\WinBGIm\lib).
+Select "Linker Setting" tab and add "libbgi.a" file e.g path c:\WinBGIm\lib\libbgi.a. 
+In "Other linker options" text box add linkers -lbgi -lgdi32 -lcomdlg32 -luuid -loleaut32 -lole32
+Now click ok.

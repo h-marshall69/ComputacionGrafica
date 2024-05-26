@@ -1,0 +1,24 @@
+# depslib dependency file v1.0
+1713797904 source:c:\users\marshall\desktop\cpp\nizzuuu\main.cpp
+	<graphics.h>
+	<winbgim.h>
+	<stdlib.h>
+	<string.h>
+	<stdio.h>
+	<conio.h>
+	<math.h>
+	<dos.h>
+	<string.h>
+	<iostream>
+	<ctime>
+
+1713797958 c:\winbgim\include\graphics.h
+	<windows.h>
+	<limits.h>
+	<sstream>
+
+1713795389 c:\winbgim\include\winbgim.h
+	<windows.h>
+	<limits.h>
+	<sstream>
+
