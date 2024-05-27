@@ -7,3 +7,11 @@
 	<cstdlib>
 	<ctime>
 
+1716813349 source:c:\users\marshall abadeer\desktop\computaciongrafica\borrar\main.cpp
+	<iostream>
+	<winbgim.h>
+	<memory>
+	<math.h>
+	<list>
+	<vector>
+

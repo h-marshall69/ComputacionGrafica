@@ -1,21 +1,35 @@
 #include <iostream>
 #include <winbgim.h>
-#include <math.h>
+#include <memory>
+#include <cmath>
 #include <list>
 #include <vector>
+#include <cstdlib>
+#include <ctime>
 using namespace std;
 
 class Point {
 public:
     double x, y;
     Point(double x = 0.0, double y = 0.0): x(x), y(y) {}
+    bool operator!=(const Point& other) const {
+        return x != other.x || y != other.y;
+    }
+    bool operator==(const Point& other) const {
+        return x == other.x && y == other.y;
+    }
 };
+
+double distancia(const Point& a, const Point& b) {
+    return sqrt(pow(b.x - a.x, 2) + pow(b.y - a.y, 2));
+}
 
 class Particle {
 public:
     Point position;
     Point velocity;
     int radio;
+
     Particle(double x, double y, double vx, double vy): position(x, y), velocity(vx, vy) {
         radio = 20;
     }
@@ -32,199 +46,87 @@ public:
     bool operator==(const Particle& other) const {
         return position.x == other.position.x && position.y == other.position.y && radio == other.radio;
     }
-    /*void update(int minx = 0, int miny = 0, int maxx = 800, int maxy = 600) {
-        position.x += velocity.x;
-        position.y += velocity.y;
 
-        if (position.x - radio < minx || position.x + radio > maxx)
-            velocity.x = -velocity.x;
-        if (position.y - radio < miny || position.y + radio > maxy)
-            velocity.y = -velocity.y;
-    }*/
-
-    void draw() {
+    void draw() const {
         circle(position.x, position.y, radio);
     }
-
-
-
 };
 
-class KDNode {
+class VPNode {
 public:
-    Point point;
-    KDNode* left;
-    KDNode* right;
-    vector<Particle*> positionsLeft;
-    vector<Particle*> positionsRight;
-    KDNode(Point pt) : point(pt), left(nullptr), right(nullptr) {}
+    Particle* particle;
+    VPNode* inside;
+    VPNode* outside;
+    double r;
+
+    VPNode(Particle* particle) : particle(particle), inside(nullptr), outside(nullptr), r(0) {}
 };
 
-class KDTree {
+class VPTree {
 private:
-    KDNode* root;
-    list<Particle> &pc;
+    VPNode* root;
+    list<Particle>& particles;
 
-
-    void collisions(vector<Particle*>& particles) {
-        for (auto it1 = particles.begin(); it1 != particles.end(); ++it1) {
-            auto it2 = it1;
-            ++it2;
-            for (; it2 != particles.end(); ++it2) {
-                double dx = (*it1)->position.x - (*it2)->position.x;
-                double dy = (*it1)->position.y - (*it2)->position.y;
-                double distance = sqrt(dx * dx + dy * dy);
-
-                if (distance < 40) { // Collision radius
-                    (*it1)->velocity.x = -(*it1)->velocity.x;
-                    (*it1)->velocity.y = -(*it1)->velocity.y;
-                    (*it2)->velocity.x = -(*it2)->velocity.x;
-                    (*it2)->velocity.y = -(*it2)->velocity.y;
-                    pc.push_front(Particle(300, 400, -1.0, -1.0));
-                }
-            }
+    void insert(VPNode*& node, Particle* particle, double radio) {
+        if (!node) {
+            node = new VPNode(particle);
+            node->r = radio;
+            return;
         }
-    }
-    void insertRec(KDNode *&root, Point point, int depth) {
-        if(root == nullptr) {
-            root = new KDNode(point);
+
+        double dist = distancia(node->particle->position, particle->position);
+        if (dist <= (node->particle->radio + particle->radio)) {
+            handleCollision(node->particle, particle);
+        }
+
+        if (dist < node->r) {
+            insert(node->inside, particle, dist);
         } else {
-            int cd = depth % 2;
-            if(cd == 0) {
-                if(point.x < root->point.x) {
-                    insertRec(root->left, point, depth + 1);
-                }
-                else
-                    insertRec(root->right, point, depth + 1);
-            } else {
-                if(point.y < root->point.y)
-                    insertRec(root->left, point, depth + 1);
-                else
-                    insertRec(root->right, point, depth + 1);
-            }
-        }
-    }
-    void addParticle(KDNode * rt, Particle &particle, int depth) {
-        if(rt) {
-            int cd = depth % 2;
-            if(cd == 0) {
-                if(particle.position.x < rt->point.x) {
-                    if(rt->left) {
-                        addParticle(rt->left, particle, depth + 1);
-                    } else {
-                        rt->positionsLeft.push_back(&particle);
-                    }
-                } else {
-                    if(rt->right) {
-                        addParticle(rt->right, particle, depth + 1);
-                    } else {
-                        rt->positionsRight.push_back(&particle);
-                    }
-                }
-            } else {
-                if(particle.position.y < rt->point.y) {
-                    if(rt->left) {
-                        addParticle(rt->left, particle, depth + 1);
-                    } else {
-                        rt->positionsLeft.push_back(&particle);
-                    }
-                } else {
-                    if(rt->right) {
-                        addParticle(rt->right, particle, depth + 1);
-                    } else {
-                        rt->positionsRight.push_back(&particle);
-                    }
-                }
-            }
+            insert(node->outside, particle, dist);
         }
     }
 
-    void drawRec(KDNode* root, int depth, int minx, int miny, int maxx, int maxy) {
-        if(root) {
-            int cd = depth % 2;
-            if(cd == 0) {
-                line(root->point.x, miny, root->point.x, maxy);
-                drawRec(root->left, depth + 1, minx, miny, root->point.x, maxy);
-                drawRec(root->right, depth + 1, root->point.x, miny, maxx, maxy);
-            } else {
-                line(minx, root->point.y, maxx, root->point.y);
-                drawRec(root->left, depth + 1, minx, miny, maxx, root->point.y);
-                drawRec(root->right, depth + 1, minx, root->point.y, maxx, maxy);
-            }
-        }
+    void handleCollision(Particle* p1, Particle* p2) {
+        swap(p1->velocity.x, p2->velocity.x);
+        swap(p1->velocity.y, p2->velocity.y);
+
+        //particles.push_back(Particle((p1->position.x + p2->position.x) / 2, (p1->position.y + p2->position.y) / 2, -1.0, -1.0));
     }
 
-    void updateParticles(KDNode* root) {
-        if(root) {
-            if(root->left)
-                updateParticles(root->left);
-            else {
-                for (auto& elem : root->positionsLeft) {
-                    elem->update();
-                    elem->draw();
-                }
-                collisions(root->positionsLeft);
-            }
-
-            if(root->right)
-                updateParticles(root->right);
-            else {
-                for (auto& elem : root->positionsRight) {
-                    elem->update();
-                    elem->draw();
-                }
-                collisions(root->positionsRight);
-            }
-        }
-    }
 public:
-
-    KDTree(list<Particle>& pc): pc(pc), root(nullptr) {}
-    //KDTree() : root(nullptr) {}
-
-    void insert(Point point) {
-        insertRec(root, point, 0);
-    }
-    void addParticle(Particle &particle) {
-        addParticle(root, particle, 0);
-    }
-    void updateParticles() {
-        updateParticles(root);
-    }
-    void draw() {
-        drawRec(root, 0, 0, 0, 800, 600);
+    VPTree(list<Particle>& particles) : particles(particles), root(nullptr) {}
+    void insert(Particle* particle) {
+        insert(root, particle, 60.0);
     }
 };
 
 int main() {
+    srand(static_cast<unsigned>(time(0)));
+    list<Particle> particles;
+    for (int i = 0; i < 25; ++i) {
+        double x = rand() % 800;
+        double y = rand() % 600;
+        double vx = (rand() % 100 / 50.0) - 1; // velocidad entre -1 y 1
+        double vy = (rand() % 100 / 50.0) - 1; // velocidad entre -1 y 1
+        particles.push_back(Particle(x, y, vx, vy));
+    }
+    initwindow(800, 600);
 
-    //KDTree k;
-    //k.insert(Point(400, 300));
-    list<Particle> p;
-    p.push_front(Particle(100, 200, 1.0, 1.0));
-    p.push_front(Particle(200, 200, -1.0, 1.0));
-    p.push_front(Particle(500, 400, 1.0, -1.0));
-    KDTree k(p);
-    initwindow(800,600);
-    while(!kbhit()){
+    while (!kbhit()) {
+        VPTree tree(particles);
+        for (auto& particle : particles) {
+            tree.insert(&particle);
+        }
 
-        //k.insert(Point(400, 300));
-        k.draw();
-        //for (auto& pp : p) {
-            //k.addParticle(pp);
-        //}
-        //k.updateParticles();
-        if (ismouseclick(WM_LBUTTONDOWN)) {
-            int x;
-            int y;
-            getmouseclick(WM_LBUTTONDOWN, x, y);
-            k.insert(Point(x, y));
+        for (auto& particle : particles) {
+            particle.draw();
+            particle.update();
         }
         delay(16);
         cleardevice();
     }
+
     getch();
     closegraph();
     return 0;
 }
-
