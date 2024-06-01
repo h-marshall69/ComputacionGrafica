@@ -41,9 +41,10 @@ class Pacman{
             x+=incX;
             y+=incY;
             if(x<0 || x>getmaxx()-6*e){
-                incX=-incX;
+                incX =- incX;
             }
-            if()
+            if(y<0 || y>getmaxy()-6*e)
+                incY = -incY;
         }
         void graficar(int color){
             setcolor(color);

@@ -235,7 +235,7 @@ int main() {
             //getmouseclick(WM_LBUTTONDOWN, x, y);
             //k.insert(Point(x, y));
         //}
-        delay(16);
+            delay(16);
         cleardevice();
     }
     getch();
