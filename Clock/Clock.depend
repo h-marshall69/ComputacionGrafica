@@ -1,0 +1,14 @@
+# depslib dependency file v1.0
+1716492335 source:c:\users\marshall abadeer\desktop\computaciongrafica\clock\main.cpp
+	<graphics.h>
+	<winbgim.h>
+	<stdlib.h>
+	<string.h>
+	<stdio.h>
+	<conio.h>
+	<math.h>
+	<dos.h>
+	<string.h>
+	<iostream>
+	<ctime>
+
