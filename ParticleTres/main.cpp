@@ -38,7 +38,14 @@ public:
         if (position.y - radio < 0 || position.y + radio > 600)
             velocity.y = -velocity.y;
     }
+    void draw() {
+        circle(position.x, position.y, radio);
+    }
 };
+
+double distancia(const Point& a, const Point& b) {
+    return sqrt(pow(b.x - a.x, 2) + pow(b.y - a.y, 2));
+}
 
 class Knode {
 public:
@@ -46,7 +53,7 @@ public:
     double partition;
     unique_ptr<Knode> left;
     unique_ptr<Knode> right;
-    vector<Particle*> particles;  // Usar punteros a partículas en lugar de objetos Particle
+    vector<Particle*> particles;  // Usar punteros a partÃ­culas en lugar de objetos Particle
     Knode(double partition) : partition(partition), left(nullptr), right(nullptr) {}
     explicit Knode(vector<Particle*>& particles) : particles(move(particles)), left(nullptr), right(nullptr) {}
 };
@@ -86,40 +93,46 @@ private:
         }
     }
 
-    void viewTree(unique_ptr<Knode>&root, int depth) {
-        if(root) {
-            int cd = depth % 2;
-            if(cd == 0) {
-                cout << "x = " << root->partition << endl;
-            } else {
-                cout << "y = " << root->partition << endl;
-            }
+    void viewTree(unique_ptr<Knode>& root, int depth) {
+        if (root) {
             if (!root->particles.empty()) {
-                root->particles[0]->position.x = 10;
-                for (auto& particle : root->particles) {
-                    cout << particle->position.x << ":" << particle->position.y << " ";
+                if (root->particles.size() > 1 && distancia(root->particles[0]->position, root->particles[1]->position) < 40) { // Collision radius
+                    root->particles[0]->velocity.x = -root->particles[0]->velocity.x;
+                    root->particles[0]->velocity.y = -root->particles[0]->velocity.y;
+                    root->particles[1]->velocity.x = -root->particles[1]->velocity.x;
+                    root->particles[1]->velocity.y = -root->particles[1]->velocity.y;
                 }
-                cout << endl;
-            } else {
-                cout << "Nones\n";
             }
             viewTree(root->left, depth + 1);
             viewTree(root->right, depth + 1);
         }
     }
+
+    void drawTree(unique_ptr<Knode>& root, int depth, int minx, int miny, int maxx, int maxy) {
+        if(root) {
+            int cd = depth % 2;
+            if(cd == 0) {
+                line(root->partition, miny, root->partition, maxy);
+                drawTree(root->left, depth + 1, minx, miny, root->partition, maxy);
+                drawTree(root->right, depth + 1, root->partition, miny, maxx, maxy);
+            } else {
+                line(minx, root->partition, maxx, root->partition);
+                drawTree(root->left, depth + 1, minx, miny, maxx, root->partition);
+                drawTree(root->right, depth + 1, minx, root->partition, maxx, maxy);
+            }
+        }
+    }
 public:
     unique_ptr<Knode> root;
     Kdtree() : root(nullptr) {}
+    ~Kdtree() {root = nullptr;}
     void insert(vector<Particle*>& particles) {
-        //vector<Particle*> particlePtrs;
-        //for (auto& particle : particles) {
-            //particlePtrs.push_back(&particle);
-        //}
         insertwo(root, particles, 0);
     }
     void view() {
         viewTree(root, 0);
     }
+    void draw() {drawTree(root, 0, 0, 0, 800, 600);}
 };
 
 int main() {
@@ -130,12 +143,20 @@ int main() {
     particles.push_back(new Particle(465, 253, -1.0, 1.0));
     particles.push_back(new Particle(134, 543, -1.0, 1.0));
 
-    Kdtree kd;
-    kd.insert(particles);
-    kd.view();
-    cout << endl;
-    for(auto & particle: particles) {
-        cout << particle->position.x << ":" << particle->position.y << " ";
+    initwindow(800, 600);
+    while (!kbhit()) {
+        Kdtree kd;
+        kd.insert(particles);
+        kd.view();
+        kd.draw();
+        for (auto& particle : particles) {
+            particle->draw();
+            particle->update();
+        }
+        delay(16);
+        cleardevice();
     }
+    getch();
+    closegraph();
     return 0;
 }
