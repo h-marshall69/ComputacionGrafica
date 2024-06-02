@@ -140,8 +140,10 @@ int main() {
     particles.push_back(new Particle(500, 400, 1.0, -1.0));
     particles.push_back(new Particle(100, 200, -1.0, 1.0));
     particles.push_back(new Particle(200, 200, -1.0, 1.0));
-    particles.push_back(new Particle(465, 253, -1.0, 1.0));
-    particles.push_back(new Particle(134, 543, -1.0, 1.0));
+    particles.push_back(new Particle(321, 253, -1.0, 1.0));
+    particles.push_back(new Particle(134, 400, -1.0, -1.0));
+    particles.push_back(new Particle(465, 153, 1.0, 1.0));
+    particles.push_back(new Particle(134, 40, 1.0, -1.0));
 
     initwindow(800, 600);
     while (!kbhit()) {
