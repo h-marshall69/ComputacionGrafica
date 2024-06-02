@@ -7,11 +7,11 @@
 	<cstdlib>
 	<ctime>
 
-1716540798 source:c:\users\marshall abadeer\desktop\computaciongrafica\particle\main.cpp
+1717256306 source:c:\users\marshall abadeer\desktop\computaciongrafica\particle\main.cpp
 	<iostream>
 	<winbgim.h>
+	<memory>
 	<math.h>
 	<list>
-	<cstdlib>
-	<ctime>
+	<vector>
 
