@@ -1,0 +1,6 @@
+# depslib dependency file v1.0
+1717338572 source:c:\users\marshall abadeer\desktop\computaciongrafica\pacmandos\main.cpp
+	<iostream>
+	<winbgim.h>
+	<math.h>
+

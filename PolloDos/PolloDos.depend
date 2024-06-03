@@ -1,0 +1,6 @@
+# depslib dependency file v1.0
+1717458834 source:c:\users\marshall abadeer\desktop\computaciongrafica\pollodos\main.cpp
+	<iostream>
+	<winbgim.h>
+	<math.h>
+
