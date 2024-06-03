@@ -1,0 +1,11 @@
+# depslib dependency file v1.0
+1717399384 source:c:\users\marshall abadeer\desktop\computaciongrafica\particlebvh\main.cpp
+	<iostream>
+	<winbgim.h>
+	<math.h>
+	<vector>
+	<memory>
+	<algorithm>
+	<cmath>
+	<cfloat>
+

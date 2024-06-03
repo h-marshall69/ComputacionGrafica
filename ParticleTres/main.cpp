@@ -68,22 +68,52 @@ private:
                     return a->position.x < b->position.x;
                 });
                 //double partition = (particles[0].position.x + particles[particles.size() - 1].position.x)/2;
-                //vector<Particle&> left;
-                //vector<Particle&> right;
-                double partition = particles[particles.size() / 2]->position.x;
+
+                double partition = particles[particles.size() / 2]->position.x + particles[particles.size() / 2]->radio;
+
+                //Inicializar la media para el nodo actual
                 root = make_unique<Knode>(partition);
-                vector<Particle*> left(particles.begin(), particles.begin() + particles.size() / 2);
-                vector<Particle*> right(particles.begin() + particles.size() / 2, particles.end());
+
+                vector<Particle*> left;
+                vector<Particle*> right;
+
+                //Recorrido para considerar tambien la radio de cada particle
+                for(auto & particle: particles) {
+                    if(particle->position.x <= root->partition) {
+                        left.push_back(particle);
+                        if(particle->position.x + particle->radio > root->partition)
+                            right.push_back(particle);
+                    } else {
+                        right.push_back(particle);
+                    }
+                }
+
+                //left[0]->position.x = 10;
                 insertwo(root->left, left, depth + 1);
                 insertwo(root->right, right, depth + 1);
             } else {
                 sort(particles.begin(), particles.end(), [](const Particle* a, const Particle* b) {
                     return a->position.y < b->position.y;
                 });
-                double partition = particles[particles.size() / 2]->position.y;
+                double partition = particles[particles.size() / 2]->position.y + particles[particles.size() / 2]->radio;
+
+                //Inicializar la media para el nodo actual
                 root = make_unique<Knode>(partition);
-                vector<Particle*> left(particles.begin(), particles.begin() + particles.size() / 2);
-                vector<Particle*> right(particles.begin() + particles.size() / 2, particles.end());
+
+                vector<Particle*> left;
+                vector<Particle*> right;
+
+                //Recorrido para considerar tambien la radio de cada particle
+                for(auto & particle: particles) {
+                    if(particle->position.y <= root->partition) {
+                        left.push_back(particle);
+                        if(particle->position.y + particle->radio > root->partition)
+                            right.push_back(particle);
+                    } else {
+                        right.push_back(particle);
+                    }
+                }
+
                 insertwo(root->left, left, depth + 1);
                 insertwo(root->right, right, depth + 1);
             }
@@ -93,18 +123,22 @@ private:
         }
     }
 
-    void viewTree(unique_ptr<Knode>& root, int depth) {
+    void collitionKdtree(unique_ptr<Knode>& root, int depth) {
         if (root) {
             if (!root->particles.empty()) {
-                if (root->particles.size() > 1 && distancia(root->particles[0]->position, root->particles[1]->position) < 40) { // Collision radius
-                    root->particles[0]->velocity.x = -root->particles[0]->velocity.x;
-                    root->particles[0]->velocity.y = -root->particles[0]->velocity.y;
-                    root->particles[1]->velocity.x = -root->particles[1]->velocity.x;
-                    root->particles[1]->velocity.y = -root->particles[1]->velocity.y;
+                for (size_t i = 0; i < root->particles.size(); ++i) {
+                    for (size_t j = i + 1; j < root->particles.size(); ++j) {
+                        if (distancia(root->particles[i]->position, root->particles[j]->position) < 40) { // Collision radius
+                            root->particles[i]->velocity.x = -root->particles[i]->velocity.x;
+                            root->particles[i]->velocity.y = -root->particles[i]->velocity.y;
+                            root->particles[j]->velocity.x = -root->particles[j]->velocity.x;
+                            root->particles[j]->velocity.y = -root->particles[j]->velocity.y;
+                        }
+                    }
                 }
             }
-            viewTree(root->left, depth + 1);
-            viewTree(root->right, depth + 1);
+            collitionKdtree(root->left, depth + 1);
+            collitionKdtree(root->right, depth + 1);
         }
     }
 
@@ -122,6 +156,19 @@ private:
             }
         }
     }
+
+    void viewTree(unique_ptr<Knode>& root, int depth) {
+        if(root) {
+            if (!root->particles.empty()) {
+                for(auto& particle: root->particles) {
+                    cout << particle->position.x << ":" << particle->position.y << " ";
+                }
+                cout << endl;
+            }
+            viewTree(root->left, depth + 1);
+            viewTree(root->right, depth + 1);
+        }
+    }
 public:
     unique_ptr<Knode> root;
     Kdtree() : root(nullptr) {}
@@ -129,36 +176,45 @@ public:
     void insert(vector<Particle*>& particles) {
         insertwo(root, particles, 0);
     }
-    void view() {
-        viewTree(root, 0);
+    void collition() {
+        collitionKdtree(root, 0);
     }
     void draw() {drawTree(root, 0, 0, 0, 800, 600);}
+    void view() {viewTree(root, 0);}
 };
 
 int main() {
     vector<Particle*> particles;
     particles.push_back(new Particle(500, 400, 1.0, -1.0));
     particles.push_back(new Particle(100, 200, -1.0, 1.0));
-    particles.push_back(new Particle(200, 200, -1.0, 1.0));
-    particles.push_back(new Particle(321, 253, -1.0, 1.0));
+    particles.push_back(new Particle(200, 200, -1.0, -1.0));
+    particles.push_back(new Particle(321, 253, 1.0, -1.0));
     particles.push_back(new Particle(134, 400, -1.0, -1.0));
     particles.push_back(new Particle(465, 153, 1.0, 1.0));
     particles.push_back(new Particle(134, 40, 1.0, -1.0));
 
-    initwindow(800, 600);
-    while (!kbhit()) {
+    if(false) {
         Kdtree kd;
         kd.insert(particles);
         kd.view();
-        kd.draw();
-        for (auto& particle : particles) {
-            particle->draw();
-            particle->update();
+        kd.collition();
+
+    } else {
+        initwindow(800, 600);
+        while (!kbhit()) {
+            Kdtree kd;
+            kd.insert(particles);
+            kd.collition();
+            kd.draw();
+            for (auto& particle : particles) {
+                particle->draw();
+                particle->update();
+            }
+            delay(16);
+            cleardevice();
         }
-        delay(16);
-        cleardevice();
+        getch();
+        closegraph();
     }
-    getch();
-    closegraph();
     return 0;
 }
