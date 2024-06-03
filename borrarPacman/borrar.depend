@@ -1,0 +1,7 @@
+# depslib dependency file v1.0
+1717420325 source:c:\users\marshall abadeer\desktop\computaciongrafica\borrarpacman\main.cpp
+	<iostream>
+	<vector>
+	<winbgim.h>
+	<cmath>
+

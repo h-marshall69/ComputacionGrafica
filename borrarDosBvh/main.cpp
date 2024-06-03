@@ -6,8 +6,14 @@
 #include <memory>
 #include <winbgim.h>
 #include <functional>
-
 using namespace std;
+
+void linea(int xini, int yini, float angulo, int largo) {
+    int x, y;
+    x = largo * cos(angulo * M_PI / 180) + xini;
+    y = largo * sin(angulo * M_PI / 180) + yini;
+    line(xini, yini, x, y);
+}
 
 class Point {
 public:
@@ -21,21 +27,32 @@ public:
     Point velocity;
 
     int radius;
+    float angulo;
+    int inc;
 
     Particle(double x, double y, double vx, double vy): position(x, y), velocity(vx, vy) {
-        radius = 20;
+        angulo = 0;
+        inc = 1;
+        radius = 10;
     }
     void update() {
         position.x += velocity.x;
         position.y += velocity.y;
+        angulo += inc;
 
         if (position.x - radius < 0 || position.x + radius > 800)
             velocity.x = -velocity.x;
         if (position.y - radius < 0 || position.y + radius > 600)
             velocity.y = -velocity.y;
+        if (angulo < 0 || angulo > 45)
+            inc = -inc;
     }
-    void draw() {
-        circle(position.x, position.y, radius);
+    void draw(int color = RED) {
+        //circle(position.x, position.y, radius);
+        setcolor(color);
+        arc(position.x , position.y , angulo, 360 - angulo, radius);
+        linea(position.x, position.y, angulo, radius);
+        linea(position.x, position.y, 360 - angulo, radius);
     }
 };
 
@@ -249,6 +266,7 @@ int main() {
     } else {
         initwindow(800, 600);
         while (!kbhit()) {
+            int numParticulas = particles.size();
 
             if (ismouseclick(WM_LBUTTONDOWN)) {
                 int x, y;
@@ -260,7 +278,7 @@ int main() {
             BVHTree bvhTree;
 
             bvhTree.insert(particles);
-            bvhTree.draw();
+            //bvhTree.draw();
             bvhTree.collision();
             for (auto& particle : particles) {
                 particle->draw();
@@ -268,6 +286,11 @@ int main() {
             }
             delay(16);
             cleardevice();
+            string mensaje = "Particulas: " + to_string(numParticulas);
+            char *cstr = new char[mensaje.length() + 1];
+            strcpy(cstr, mensaje.c_str());
+            outtextxy(10, 10, cstr);
+            delete[] cstr;
         }
         getch();
         closegraph();

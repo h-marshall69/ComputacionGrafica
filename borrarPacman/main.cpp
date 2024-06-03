@@ -1,160 +1,80 @@
-#include <graphics.h>
-#include <winbgim.h>
-#include <stdlib.h>
-#include <string.h>
-#include <stdio.h>
-#include <conio.h>
-#include <math.h>
-#include <dos.h>
-#include <string.h>
 #include <iostream>
-#include <ctime>
+#include <vector>
+#include <winbgim.h>
+#include <cmath>
+using namespace std;
 
-#define S_N_L (radius-10)        // Second Needle Length
-#define S_N_C RED                   // Second needle Color
-#define M_N_L (radius-20)           // Minute Needle Length
-#define M_N_C LIGHTRED              // Minute Needle Color
-#define H_N_L (radius-(radius/2))       // Hour Needle Length
-#define H_N_C CYAN                     // Hour Needle Color
+void linea(int xini, int yini, float angulo, int largo) {
+    int x, y;
+    x = largo * cos(angulo * M_PI / 180) + xini;
+    y = largo * sin(angulo * M_PI / 180) + yini;
+    line(xini, yini, x, y);
+}
 
-float cx,cy;
-float radius=100;
+void getXY(int xini, int yini, float angulo, int largo, int &x, int &y) {
+    x = largo * cos(angulo * M_PI / 180) + xini;
+    y = largo * sin(angulo * M_PI / 180) + yini;
+}
 
-void draw_face(float radius);
-void get_time(int &h,int &m,int &s);
-void second_needle(int s);
-void minute_needle(int m,int s);
-void hour_needle(int h,int m,int s);
+class Point {
+public:
+    double x, y;
+    Point(double x = 0.0, double y = 0.0): x(x), y(y) {}
+};
 
-int main(void)
-{
-    /* request auto detection */
-    int gdriver = DETECT, gmode, errorcode;
-    initgraph(&gdriver,&gmode,"");
-    /***********************************/
-    cx=getmaxx()/2.0; // cx is center x value.
-    cy=getmaxy()/2.0; // cy is center y value.
-    /** Now the point (cx,cy) is the center of your screen. **/
+class Pacman {
+public:
+    Point position;
+    Point velocity;
 
-    float x,y;
-    int hour,minute,second;
-    draw_face(radius);
-    while(!kbhit())
-    {
-        get_time(hour,minute,second);
-        second_needle(second);
-        minute_needle(minute,second);
-        hour_needle(hour,minute,second);
-        circle(cx,cy,2);
-        delay(100);
+    int radius;
+    float angulo;
+    int inc;
+
+    Pacman(double x, double y, double vx, double vy): position(x, y), velocity(vx, vy) {
+        angulo = 0;
+        inc = 1;
+        radius = 20;
     }
+
+    void mover() {
+        position.x += velocity.x;
+        position.y += velocity.y;
+        angulo += inc;
+        if (position.x - radius < 0 || position.x + radius > 800)
+            velocity.x = -velocity.x;
+        if (position.y - radius < 0 || position.y + radius > 600)
+            velocity.y = -velocity.y;
+
+        if (angulo < 0 || angulo > 45)
+            inc = -inc;
+    }
+
+    void graficar(int color) {
+        setcolor(color);
+        arc(position.x , position.y , angulo, 360 - angulo, radius);
+        linea(position.x, position.y, angulo, radius);
+        linea(position.x, position.y, 360 - angulo, radius);
+    }
+};
+
+int main() {
+    initwindow(800, 600);
+    vector<Pacman> pacmans;
+
+    pacmans.push_back(Pacman(500.0, 400.0, 1.0, -1.0));
+    pacmans.push_back(Pacman(100.0, 200.0, -1.0, 1.0));
+
+    while (!kbhit()) {
+        for (auto &pacman : pacmans) {
+            pacman.graficar(RED); // Puedes cambiar el color si quieres
+            pacman.mover();
+        }
+        delay(16);
+        cleardevice();
+    }
+
     getch();
     closegraph();
     return 0;
-}
-//*************** FUNCTIONS DEFINITIONS *****************//
-
-void draw_face(float radius)
-{
-    int theta=0; // theta is the angle variable.
-    float x,y;
-    /** Draw Clock Border. **/
-    circle(cx,cy,radius+24);
-    circle(cx,cy,radius+23);
-    /** Draw GREEN material border. **/
-    setcolor(BROWN);    // I like a wooden frame!
-    /** Paint the border. **/
-    for(int i=0;i<9;i++)
-    circle(cx,cy,radius+13+i);
-    /** Set the color white. **/
-    setcolor(WHITE);
-    /** Draw outer-inner border. **/
-    circle(cx,cy,radius+12);
-    circle(cx,cy,radius+10);
-    /** Draw center dot. **/
-    circle(cx,cy,2);
-    int i=0;
-    /** DRAW NUMERIC POINTS **/
-    do{
-        /** Getting (x,y) for numeric points **/
-        x=cx+radius*cos(theta*M_PI/180);
-        y=cy+radius*sin(theta*M_PI/180);
-        /** Draw Numeric Points **/
-        circle(x,y,2);
-        /* Draw Dots around each numeric points **/
-        circle(x+5,y,0);
-        circle(x-5,y,0);
-        circle(x,y+5,0);
-        circle(x,y-5,0);
-        /** Increase angle by 30 degrees,
-        which is the circular distance between each numeric points. **/
-        theta+=30;
-        /** Increase i by 1. **/
-        i++;
-
-    } while(i!=12); //LIMIT NUMERIC POINTS UPTO =12= Numbers.
-    i=0;
-    /** DRAW DOTS BETWEEN NUMERIC POINTS. **/
-    do{
-        putpixel(cx+radius*cos(i*M_PI/180)
-        ,cy+radius*sin(i*M_PI/180),DARKGRAY);
-        i+=6;
-    }while(i!=360);
-
-    /** FACE COMPLETELY DRAWN. **/
-}
-//================
-/** Function to get the current time. **/
-void get_time(int &h,int &m,int &s)
-{
-    time_t rawtime;
-    struct tm *t;
-    time(&rawtime);
-    t = gmtime(&rawtime);
-    h=t->tm_hour;
-    m=t->tm_min;
-    s=t->tm_sec;
-}
-//=================
-/** Function to draw Second needle. **/
-void second_needle(int s)
-{
-    float angle=-90;
-    float sx,sy;
-    setcolor(0);
-    sx=cx+S_N_L*cos((angle+s*6-6)*M_PI/180);
-    sy=cy+S_N_L*sin((angle+s*6-6)*M_PI/180);
-    line(cx,cy,sx,sy);
-    setcolor(S_N_C);
-    sx=cx+S_N_L*cos((angle+s*6)*M_PI/180);
-    sy=cy+S_N_L*sin((angle+s*6)*M_PI/180);
-    line(cx,cy,sx,sy);
-}
-/** Function to draw Minute needle. **/
-void minute_needle(int m,int s)
-{
-    float angle=-90;
-    float sx,sy;
-    setcolor(0);
-    sx=cx+M_N_L*cos((angle+m*6-6)*M_PI/180);
-    sy=cy+M_N_L*sin((angle+m*6-6)*M_PI/180);
-    line(cx,cy,sx,sy);
-    setcolor(M_N_C);
-    sx=cx+M_N_L*cos((angle+m*6/*+(s*6/60)*/)*M_PI/180);
-    sy=cy+M_N_L*sin((angle+m*6/*+(s*6/60)*/)*M_PI/180);
-    line(cx,cy,sx,sy);
-}
-/** Function to draw Hour needle. **/
-void hour_needle(int h,int m,int s)
-{
-    float angle=-90;
-    float sx,sy;
-    setcolor(0);
-    sx=cx+H_N_L*cos((angle+h*30-(m*30/60))*M_PI/180);
-    sy=cy+H_N_L*sin((angle+h*30-(m*30/60))*M_PI/180);
-    line(cx,cy,sx,sy);
-    setcolor(H_N_C);
-    sx=cx+H_N_L*cos((angle+h*30+(m*30/60))*M_PI/180);
-    sy=cy+H_N_L*sin((angle+h*30+(m*30/60))*M_PI/180);
-    line(cx,cy,sx,sy);
 }
