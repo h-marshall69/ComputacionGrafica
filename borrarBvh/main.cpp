@@ -1,219 +1,150 @@
-#include <iostream>
-#include <vector>
-#include <algorithm>
-#include <cmath>
-#include <cfloat>
-#include <memory>
+#include <graphics.h>
 #include <winbgim.h>
-#include <functional>
+#include <stdlib.h>
+#include <string.h>
+#include <stdio.h>
+#include <conio.h>
+#include <math.h>
+#include <dos.h>
+#include <string.h>
+#include <iostream>
+#include <ctime>
 
-using namespace std;
+#define S_N_L (radius-10)        // Second Needle Length
+#define S_N_C RED                   // Second needle Color
+#define M_N_L (radius-20)           // Minute Needle Length
+#define M_N_C LIGHTRED              // Minute Needle Color
+#define H_N_L (radius-(radius/2))       // Hour Needle Length
+#define H_N_C CYAN                     // Hour Needle Color
 
-class Point {
-public:
-    double x, y;
-    Point(double x = 0.0, double y = 0.0): x(x), y(y) {}
-};
+float cx,cy;
+float radius=100;
 
-class Particle {
-public:
-    Point position;
-    Point velocity;
+void draw_face(float radius) {
+    int theta=0; // theta is the angle variable.
+    float x,y;
+    /** Draw Clock Border. **/
+    circle(cx,cy,radius+24);
+    circle(cx,cy,radius+23);
+    /** Draw GREEN material border. **/
+    setcolor(WHITE);    // I like a wooden frame!
+    /** Paint the border. **/
+    for(int i=0;i<9;i++)
+        circle(cx,cy,radius+13+i);
+    /** Set the color white. **/
+    setcolor(WHITE);
+    /** Draw outer-inner border. **/
+    //circle(cx,cy,radius+12);
+    //circle(cx,cy,radius+10);
+    /** Draw center dot. **/
+    circle(cx,cy,2);
+    int i=0;
+    /** DRAW NUMERIC POINTS **/
+    do{
+        /** Getting (x,y) for numeric points **/
+        x = cx+radius*cos(theta*M_PI/180);
+        y = cy+radius*sin(theta*M_PI/180);
+        /** Draw Numeric Points **/
+        circle(x,y,2);
+        /* Draw Dots around each numeric points **/
+        circle(x+5,y,0);
+        circle(x-5,y,0);
+        circle(x,y+5,0);
+        circle(x,y-5,0);
+        /** Increase angle by 30 degrees,
+        which is the circular distance between each numeric points. **/
+        theta+=30;
 
-    int radius;
+        i++;
 
-    Particle(double x, double y, double vx, double vy): position(x, y), velocity(vx, vy) {
-        radius = 20;
+    } while(i!=12); //LIMIT NUMERIC POINTS UPTO =12= Numbers.
+    i=0;
+
+    do{
+        putpixel(cx+radius*cos(i*M_PI/180)
+        ,cy+radius*sin(i*M_PI/180),DARKGRAY);
+        i+=6;
+    }while(i!=360);
+
+
+}
+//================
+
+void get_time(int &h,int &m,int &s) {
+    time_t rawtime;
+    struct tm *t;
+    time(&rawtime);
+    t = gmtime(&rawtime);
+    h=t->tm_hour;
+    m=t->tm_min;
+    s=t->tm_sec;
+}
+//=================
+
+void second_needle(int s) {
+    float angle=-90;
+    float sx,sy;
+    setcolor(0);
+    sx=cx+S_N_L*cos((angle+s*6-6)*M_PI/180);
+    sy=cy+S_N_L*sin((angle+s*6-6)*M_PI/180);
+    line(cx,cy,sx,sy);
+    setcolor(S_N_C);
+    sx=cx+S_N_L*cos((angle+s*6)*M_PI/180);
+    sy=cy+S_N_L*sin((angle+s*6)*M_PI/180);
+    line(cx,cy,sx,sy);
+}
+
+void minute_needle(int m,int s) {
+    float angle=-90;
+    float sx,sy;
+    setcolor(0);
+    sx=cx+M_N_L*cos((angle+m*6-6)*M_PI/180);
+    sy=cy+M_N_L*sin((angle+m*6-6)*M_PI/180);
+    line(cx,cy,sx,sy);
+    setcolor(M_N_C);
+    sx=cx+M_N_L*cos((angle+m*6/*+(s*6/60)*/)*M_PI/180);
+    sy=cy+M_N_L*sin((angle+m*6/*+(s*6/60)*/)*M_PI/180);
+    line(cx,cy,sx,sy);
+}
+
+void hour_needle(int h,int m,int s) {
+    float angle=-90;
+    float sx,sy;
+    setcolor(0);
+    sx=cx+H_N_L*cos((angle+h*30-(m*30/60))*M_PI/180);
+    sy=cy+H_N_L*sin((angle+h*30-(m*30/60))*M_PI/180);
+    line(cx,cy,sx,sy);
+    setcolor(H_N_C);
+    sx=cx+H_N_L*cos((angle+h*30+(m*30/60))*M_PI/180);
+    sy=cy+H_N_L*sin((angle+h*30+(m*30/60))*M_PI/180);
+    line(cx,cy,sx,sy);
+}
+
+
+int main(void)
+{
+    /* request auto detection */
+    int gdriver = DETECT, gmode, errorcode;
+    initgraph(&gdriver,&gmode,"");
+    /***********************************/
+    cx=getmaxx()/2.0; // cx is center x value.
+    cy=getmaxy()/2.0; // cy is center y value.
+
+
+    float x,y;
+    int hour,minute,second;
+    draw_face(radius);
+    while(!kbhit())
+    {
+        get_time(hour,minute,second);
+        second_needle(second);
+        minute_needle(minute,second);
+        hour_needle(hour,minute,second);
+        circle(cx,cy,2);
+        delay(100);
     }
-    void update() {
-        position.x += velocity.x;
-        position.y += velocity.y;
-
-        if (position.x - radius < 0 || position.x + radius > 800)
-            velocity.x = -velocity.x;
-        if (position.y - radius < 0 || position.y + radius > 600)
-            velocity.y = -velocity.y;
-    }
-    void draw() {
-        circle(position.x, position.y, radius);
-    }
-};
-
-class AABB{
-public:
-    double xMin, yMin;
-    double xMax, yMax;
-    AABB() : xMin(0.0), xMax(0.0), yMin(0.0), yMax(0.0) {}
-    explicit AABB(double xMin, double xMax, double yMin, double yMax)
-        : xMin(xMin), xMax(xMax), yMin(yMin), yMax(yMax) {}
-
-    bool overlaps(const AABB& other) const {
-        return xMin <= other.xMax && xMax >= other.xMin &&
-               yMin <= other.yMax && yMax >= other.yMin;
-    }
-};
-
-class BvhNode{
-public:
-    AABB box;
-    Particle* particles; // Cambiado de vector a puntero único de Particle
-    std::unique_ptr<BvhNode> left;
-    std::unique_ptr<BvhNode> right;
-
-    BvhNode() : particles(nullptr), left(nullptr), right(nullptr) {}
-};
-
-class BVHTree {
-private:
-    void insertBvh(std::unique_ptr<BvhNode>& root, std::vector<Particle*>& particles, int start, int end) {
-        if (root) {
-            int mid = (start + end) / 2;
-
-            std::nth_element(particles.begin() + start, particles.begin() + mid, particles.begin() + end,
-                             [](Particle* a, Particle* b) { return a->position.x < b->position.x; });
-
-            insertBvh(root->left, particles, start, mid);
-            insertBvh(root->right, particles, mid, end);
-
-            root->box = AABB(
-                std::min(root->left ? root->left->box.xMin : FLT_MAX, root->right ? root->right->box.xMin : FLT_MAX),
-                std::max(root->left ? root->left->box.xMax : -FLT_MAX, root->right ? root->right->box.xMax : -FLT_MAX),
-                std::min(root->left ? root->left->box.yMin : FLT_MAX, root->right ? root->right->box.yMin : FLT_MAX),
-                std::max(root->left ? root->left->box.yMax : -FLT_MAX, root->right ? root->right->box.yMax : -FLT_MAX)
-            );
-        } else {
-            if (start >= end) {
-                return;
-            }
-
-            root = std::make_unique<BvhNode>();
-            if (end - start == 1) {
-                root->particles = particles[start]; // Cambiado para asignar un solo puntero en lugar de un vector de punteros
-                root->box = AABB(particles[start]->position.x - particles[start]->radius,
-                                    particles[start]->position.x + particles[start]->radius,
-                                    particles[start]->position.y - particles[start]->radius,
-                                    particles[start]->position.y + particles[start]->radius);
-            } else {
-                insertBvh(root, particles, start, end);
-            }
-        }
-    }
-
-    void drawBox(unique_ptr<BvhNode>& root) {
-        if(root) {
-            rectangle(root->box.xMin, root->box.yMin, root->box.xMax,root->box.yMax);
-            drawBox(root->left);
-            drawBox(root->right);
-        }
-    }
-public:
-    std::unique_ptr<BvhNode> root;
-
-    BVHTree() : root(nullptr) {}
-    ~BVHTree() {}
-
-    void updateVelocities(std::unique_ptr<BvhNode>& root) {
-        if (!root || (!root->left && !root->right)) {
-            return;
-        }
-
-        if (root->left && root->right && root->left->box.overlaps(root->right->box)) {
-            updateVelocities(root->left);
-            updateVelocities(root->right);
-
-            vector<Particle*> leftParticles, rightParticles;
-            function<void(unique_ptr<BvhNode>&, vector<Particle*>&)> collectParticles = [&](unique_ptr<BvhNode>& n, vector<Particle*>& particles) {
-                if (!n) return;
-                if (n->particles) {
-                    particles.push_back(n->particles);
-                } else {
-                    collectParticles(n->left, particles);
-                    collectParticles(n->right, particles);
-                }
-            };
-
-            collectParticles(root->left, leftParticles);
-            collectParticles(root->right, rightParticles);
-
-            for (auto lp : leftParticles) {
-                for (auto rp : rightParticles) {
-                    double dx = lp->position.x - rp->position.x;
-                    double dy = lp->position.y - rp->position.y;
-                    double distance = sqrt(dx * dx + dy * dy);
-                    if (distance < (lp->radius + rp->radius)) {
-                        // Update velocities
-                        double nx = (rp->position.x - lp->position.x) / distance;
-                        double ny = (rp->position.y - lp->position.y) / distance;
-
-                        double tx = -ny;
-                        double ty = nx;
-
-                        double dpTan1 = lp->velocity.x * tx + lp->velocity.y * ty;
-                        double dpTan2 = rp->velocity.x * tx + rp->velocity.y * ty;
-
-                        double dpNorm1 = lp->velocity.x * nx + lp->velocity.y * ny;
-                        double dpNorm2 = rp->velocity.x * nx + rp->velocity.y * ny;
-
-                        double m1 = (dpNorm1 * (lp->radius - rp->radius) + 2.0 * rp->radius * dpNorm2) / (lp->radius + rp->radius);
-                        double m2 = (dpNorm2 * (rp->radius - lp->radius) + 2.0 * lp->radius * dpNorm1) / (lp->radius + rp->radius);
-
-                        lp->velocity.x = tx * dpTan1 + nx * m1;
-                        lp->velocity.y = ty * dpTan1 + ny * m1;
-                        rp->velocity.x = tx * dpTan2 + nx * m2;
-                        rp->velocity.y = ty * dpTan2 + ny * m2;
-                    }
-                }
-            }
-        }
-    }
-
-    void insert(std::vector<Particle*>& particles) {
-        insertBvh(root, particles, 0, particles.size());
-    }
-    void draw() {drawBox(root);}
-
-    void collision() {
-        updateVelocities(root);
-    }
-};
-
-int main() {
-    std::vector<Particle*> particles = {
-        new Particle(500.0, 400.0, 1.0, -1.0),
-        new Particle(100.0, 200.0, -1.0, 1.0),
-        new Particle(200.0, 200.0, -1.0, -1.0),
-        new Particle(321.0, 253.0, 1.0, -1.0),
-        new Particle(134, 400, -1.0, -1.0),
-        new Particle(465, 153, 1.0, 1.0),
-        new Particle(134, 40, 1.0, -1.0)
-    };
-
-    if(false) {
-        cout<<2;
-
-    } else {
-        initwindow(800, 600);
-        while (!kbhit()) {
-            BVHTree bvhTree;
-
-            bvhTree.insert(particles);
-            bvhTree.draw();
-            bvhTree.collision();
-            for (auto& particle : particles) {
-                particle->draw();
-                particle->update();
-            }
-            delay(16);
-            cleardevice();
-        }
-        getch();
-        closegraph();
-    }
-
-    // Cleanup
-    for (auto p : particles) {
-        delete p;
-    }
-
+    getch();
+    closegraph();
     return 0;
 }
+
