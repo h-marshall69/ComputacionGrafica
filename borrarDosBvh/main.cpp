@@ -195,6 +195,14 @@ int main() {
     } else {
         initwindow(800, 600);
         while (!kbhit()) {
+
+            if (ismouseclick(WM_LBUTTONDOWN)) {
+                int x, y;
+                getmouseclick(WM_LBUTTONDOWN, x, y);
+                //bvhTree.addParticle(x, y);
+                particles.push_back(new Particle(x, y, 0.0, 0.0));
+                clearmouseclick(WM_LBUTTONDOWN);
+            }
             BVHTree bvhTree;
 
             bvhTree.insert(particles);
