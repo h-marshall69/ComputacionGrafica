@@ -21,7 +21,7 @@ public:
     int radius;
 
     Particle(double x, double y, double vx, double vy): position(x, y), velocity(vx, vy) {
-        radius = 10;
+        radius = 20;
     }
 
     void update() {
@@ -104,6 +104,9 @@ private:
             drawBox(root->right);
         }
     }
+
+    void detectCollisions() {
+    }
 public:
     //BvhNode* root;
     unique_ptr<BvhNode> root;
@@ -113,6 +116,7 @@ public:
         insertBvh(root, particles, 0, particles.size());
     }
     void draw() {drawBox(root);}
+    void collision() {}
 };
 
 int main() {
@@ -120,7 +124,7 @@ int main() {
     particles.push_back(new Particle(500, 400, 1.0, -1.0));
     particles.push_back(new Particle(100, 200, -1.0, 1.0));
     particles.push_back(new Particle(200, 200, -1.0, -1.0));
-    particles.push_back(new Particle(321, 253, 1.0, -1.0));
+    particles.push_back(new Particle(321, 253, -1.0, -1.0));
     particles.push_back(new Particle(134, 400, -1.0, -1.0));
     particles.push_back(new Particle(465, 153, 1.0, 1.0));
     particles.push_back(new Particle(134, 40, 1.0, -1.0));

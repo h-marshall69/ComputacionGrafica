@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1717402310 source:c:\users\marshall abadeer\desktop\computaciongrafica\borrarbvh\main.cpp
+1717403774 source:c:\users\marshall abadeer\desktop\computaciongrafica\borrardosbvh\main.cpp
 	<iostream>
 	<vector>
 	<algorithm>
