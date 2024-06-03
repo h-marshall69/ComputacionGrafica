@@ -172,22 +172,76 @@ public:
         insertBvh(root, particles, 0, particles.size());
     }
     void draw() {drawBox(root);}
+    void checkAllCollisions(std::unique_ptr<BvhNode>& left, std::unique_ptr<BvhNode>& right) {
+        vector<Particle*> leftParticles, rightParticles;
+        std::function<void(std::unique_ptr<BvhNode>&, vector<Particle*>&)> collectLeafParticles =
+        [&](std::unique_ptr<BvhNode>& node, vector<Particle*>& particles) {
+            if (node && !node->left && !node->right && node->particles) {
+                particles.push_back(node->particles);
+            } else {
+                if (node->left) collectLeafParticles(node->left, particles);
+                if (node->right) collectLeafParticles(node->right, particles);
+            }
+        };
 
+        collectLeafParticles(left, leftParticles);
+        collectLeafParticles(right, rightParticles);
+
+        for (auto lp : leftParticles) {
+            for (auto rp : rightParticles) {
+                double dx = lp->position.x - rp->position.x;
+                double dy = lp->position.y - rp->position.y;
+                double distance = sqrt(dx * dx + dy * dy);
+                if (distance < (lp->radius + rp->radius)) {
+                    // Colisión detectada, actualizar velocidades
+                    double nx = (rp->position.x - lp->position.x) / distance;
+                    double ny = (rp->position.y - lp->position.y) / distance;
+
+                    double tx = -ny;
+                    double ty = nx;
+
+                    double dpTan1 = lp->velocity.x * tx + lp->velocity.y * ty;
+                    double dpTan2 = rp->velocity.x * tx + rp->velocity.y * ty;
+
+                    double dpNorm1 = lp->velocity.x * nx + lp->velocity.y * ny;
+                    double dpNorm2 = rp->velocity.x * nx + rp->velocity.y * ny;
+
+                    double m1 = (dpNorm1 * (lp->radius - rp->radius) + 2.0 * rp->radius * dpNorm2) / (lp->radius + rp->radius);
+                    double m2 = (dpNorm2 * (rp->radius - lp->radius) + 2.0 * lp->radius * dpNorm1) / (lp->radius + rp->radius);
+
+                    lp->velocity.x = tx * dpTan1 + nx * m1;
+                    lp->velocity.y = ty * dpTan1 + ny * m1;
+                    rp->velocity.x = tx * dpTan2 + nx * m2;
+                    rp->velocity.y = ty * dpTan2 + ny * m2;
+                }
+            }
+        }
+    }
+    void checkOverlaps(std::unique_ptr<BvhNode>& root) {
+        if (root) {
+            if (root->left && root->right && root->left->box.overlaps(root->right->box)) {
+                checkAllCollisions(root->left, root->right);
+                //return;
+            }
+            checkOverlaps(root->left);
+            checkOverlaps(root->right);
+        }
+    }
     void collision() {
-        updateVelocities(root);
+        //updateVelocities(root);
+        checkOverlaps(root);
     }
 };
 
 int main() {
-    std::vector<Particle*> particles = {
-        new Particle(500.0, 400.0, 1.0, -1.0),
-        new Particle(100.0, 200.0, -1.0, 1.0),
-        new Particle(200.0, 200.0, -1.0, -1.0),
-        new Particle(321.0, 253.0, 1.0, -1.0),
-        new Particle(134, 400, -1.0, -1.0),
-        new Particle(465, 153, 1.0, 1.0),
-        new Particle(134, 40, 1.0, -1.0)
-    };
+    std::vector<Particle*> particles;
+    particles.push_back(new Particle(500, 400, 1.0, -1.0));
+    particles.push_back(new Particle(100, 200, -1.0, 1.0));
+    particles.push_back(new Particle(200, 200, -1.0, -1.0));
+    particles.push_back(new Particle(321, 253, 1.0, -1.0));
+    particles.push_back(new Particle(134, 400, -1.0, -1.0));
+    particles.push_back(new Particle(465, 153, 1.0, 1.0));
+    particles.push_back(new Particle(134, 40, 1.0, -1.0));
 
     if(false) {
         cout<<2;
