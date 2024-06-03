@@ -1,11 +1,14 @@
 # depslib dependency file v1.0
-1717402423 source:c:\users\marshall abadeer\desktop\computaciongrafica\borrarbvh\main.cpp
-	<iostream>
-	<vector>
-	<algorithm>
-	<cmath>
-	<cfloat>
-	<memory>
+1717439629 source:c:\users\marshall abadeer\desktop\computaciongrafica\borrarbvh\main.cpp
+	<graphics.h>
 	<winbgim.h>
-	<functional>
+	<stdlib.h>
+	<string.h>
+	<stdio.h>
+	<conio.h>
+	<math.h>
+	<dos.h>
+	<string.h>
+	<iostream>
+	<ctime>
 

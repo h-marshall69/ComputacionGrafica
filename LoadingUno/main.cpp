@@ -1,4 +1,3 @@
-
 #include <graphics.h>
 #include <iostream>
 #include <cmath>
@@ -10,17 +9,18 @@ void getXY(int xini, int yini, float angulo, int largo, int& x, int& y) {
     y = yini - largo * sin(angulo * M_PI / 180);
 }
 
-void loading(int x, int y, int r, int actual, int n, int col1 = 10) {
+void loading(int x, int y, int r, int actual, int n, int col1 = 10, int col2 = 0) {
     float angulo = 360.0 / n;
     float angulo2 = 0;
     int x1, y1;
-    for (int i = 0; i <= actual; i++) {
+    for (int i = 0; i < n; i++) {
         getXY(x, y, angulo2, r, x1, y1);
-        setcolor(col1);
+        setcolor(i <= actual ? col1 : col2);
         circle(x1, y1, 5);
         angulo2 += angulo;
     }
 }
+
 int main() {
     int gd = DETECT, gm;
     initgraph(&gd, &gm, "");
@@ -28,24 +28,19 @@ int main() {
     int centerX = getmaxx() / 2;
     int centerY = getmaxy() / 2;
 
-    setcolor(10);
-
     int radius = 50;
-    int startAngle = 0;
-    int endAngle = 30;
-    int increment = 10;
     int actual = 0;
+    int numDots = 12;
+    int delayTime = 100;
+
 
     outtextxy(centerX - 30, centerY - 5, "Loading...");
-    while (!kbhit()) {
 
-        loading(centerX, centerY, radius, actual, 12);
-
-        delay(100);
-        loading(centerX, centerY, radius, actual, 12, 0);
-        actual++;
-        actual=actual%12;
-
+    while (!kbhit()) { // Loop until a key is hit
+        loading(centerX, centerY, radius, actual, numDots);
+        delay(delayTime);
+        loading(centerX, centerY, radius, actual, numDots, 0);
+        actual = (actual + 1) % numDots;
     }
 
     closegraph();

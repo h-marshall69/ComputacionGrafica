@@ -1,0 +1,6 @@
+# depslib dependency file v1.0
+1717441355 source:c:\users\marshall abadeer\desktop\computaciongrafica\engranaje\main.cpp
+	<graphics.h>
+	<iostream>
+	<cmath>
+

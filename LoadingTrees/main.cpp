@@ -32,18 +32,19 @@ int main() {
     initwindow(800, 600);
 
     int actual = 0;
-    float alfa = 5.0;
-
+    float alfa = 0.0;
+    int centerX = getmaxx() / 2;
+    int centerY = getmaxy() / 2;
+    outtextxy(centerX - 30, centerY - 5, "Loading...");
     while (true) {
-        cleardevice();
-        loadingUno(400, 300, 50, 10, alfa, actual, 15, 10);
+        loadingUno(centerX, centerY, 50, 12, alfa, actual, 15, 10);
         delay(100);
+        loadingUno(centerX, centerY, 50, 12, alfa, actual, 15, 0);
         actual = (actual + 1) % 12;
-        //alfa += 0.5;
+        //alfa ++;
     }
 
     getch();
     closegraph();
     return 0;
 }
-

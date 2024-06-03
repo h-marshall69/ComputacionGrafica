@@ -1,0 +1,6 @@
+# depslib dependency file v1.0
+1717449709 source:c:\users\marshall abadeer\desktop\computaciongrafica\loadingtrees\main.cpp
+	<graphics.h>
+	<iostream>
+	<cmath>
+

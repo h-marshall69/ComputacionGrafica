@@ -85,8 +85,8 @@ void second_needle(int s) {
     float angle=-90;
     float sx,sy;
     setcolor(0);
-    sx=cx+S_N_L*cos((angle+s*6-6)*M_PI/180);
-    sy=cy+S_N_L*sin((angle+s*6-6)*M_PI/180);
+    sx = cx + S_N_L*cos((angle+s*6-6)*M_PI/180);
+    sy = cy + S_N_L*sin((angle+s*6-6)*M_PI/180);
     line(cx,cy,sx,sy);
     setcolor(S_N_C);
     sx=cx+S_N_L*cos((angle+s*6)*M_PI/180);
