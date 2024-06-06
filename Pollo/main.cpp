@@ -32,10 +32,7 @@ int main()
 {
     initwindow(800,800);
     int e = 20;
-    /*for(int i = 0; i < 800; i += e) {
-        line(0, i, 800, i);
-        line(i, 0, i, 800);
-    }*/
+
     setlinestyle(SOLID_LINE, 0, 4);
     int color, color2 = BLACK;
     while(!kbhit()) {

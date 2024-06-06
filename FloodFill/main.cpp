@@ -1,23 +1,11 @@
 #include <graphics.h>
 #include <iostream>
 #include <utility>
-#include <stack>
 #include <queue>
+
 using namespace std;
 
-void FloodFillTwo(int x, int y, int fillColor, int oldColor) {
-    if(0 < x && x < getmaxx() && 0 < y && y < getmaxy()) {
-        if(getpixel(x, y) == oldColor) {
-            putpixel(x, y, fillColor);
-            FloodFillTwo(x + 1, y, fillColor, oldColor);
-            FloodFillTwo(x - 1, y, fillColor, oldColor);
-            FloodFillTwo(x, y + 1, fillColor, oldColor);
-            FloodFillTwo(x, y - 1, fillColor, oldColor);
-        }
-    }
-}
-
-void FloodFillExploration(int x, int y, int fillColor, int oldColor) {
+void Fillqueue(int x, int y, int fillColor, int oldColor) {
     queue<pair<int, int>> pixels;
     pixels.push(make_pair(x, y));
 
@@ -27,20 +15,31 @@ void FloodFillExploration(int x, int y, int fillColor, int oldColor) {
         x = current.first;
         y = current.second;
 
-        if (x >= 0 && x < getmaxx() && y >= 0 && y < getmaxy() && getpixel(x, y) == oldColor) {
-            putpixel(x, y, fillColor);
-
-            // Explorar los píxeles adyacentes
-            pixels.push(make_pair(x + 1, y));
-            pixels.push(make_pair(x - 1, y));
-            pixels.push(make_pair(x, y + 1));
-            pixels.push(make_pair(x, y - 1));
+        if (0 <= x && x <= getmaxx() && 0 <= y && y <= getmaxy()) {
+            if (getpixel(x, y) == oldColor) {
+                putpixel(x, y, fillColor);
+            }
+            if (getpixel(x + 1, y) == oldColor) {
+                putpixel(x + 1, y, fillColor);
+                pixels.push(make_pair(x + 1, y));
+            }
+            if (getpixel(x - 1, y) == oldColor) {
+                putpixel(x - 1, y, fillColor);
+                pixels.push(make_pair(x - 1, y));
+            }
+            if (getpixel(x, y + 1) == oldColor) {
+                putpixel(x, y + 1, fillColor);
+                pixels.push(make_pair(x, y + 1));
+            }
+            if (getpixel(x, y - 1) == oldColor) {
+                putpixel(x, y - 1, fillColor);
+                pixels.push(make_pair(x, y - 1));
+            }
         }
     }
 }
 
 int main() {
-
     int gd = DETECT, gm;
     initgraph(&gd, &gm, "");
 
@@ -63,21 +62,22 @@ int main() {
     bar(100, 0, 150, 50);
     setfillstyle(SOLID_FILL, BLUE);
     bar(150, 0, 200, 50);
+
     int x, y;
-    while(!kbhit()) {
-        if(mousex() > 0 && mousex() < 200 && mousey() > 0 && mousey() < 50) {
-            if (ismouseclick(WM_LBUTTONDOWN)) {
-                getmouseclick(WM_LBUTTONDOWN, x, y);
-                colorUno = getpixel(x, y);
-            }
-        }
+    while (!kbhit()) {
         if (ismouseclick(WM_LBUTTONDOWN)) {
             getmouseclick(WM_LBUTTONDOWN, x, y);
-            setfillstyle(SOLID_FILL, colorUno);
-            colorDos = getpixel(x, y);
-            FloodFillExploration(x, y, colorUno, colorDos);
+            if (x > 0 && x < 200 && y > 0 && y < 50) {
+                colorUno = getpixel(x, y);
+            } else {
+                setfillstyle(SOLID_FILL, colorUno);
+                colorDos = getpixel(x, y);
+                Fillqueue(x, y, colorUno, colorDos);
+            }
         }
+        delay(100);
     }
+
     getch();
     closegraph();
     return 0;
