@@ -1,3 +1,4 @@
+
 #include <graphics.h>
 #include <cstdlib>
 #include <ctime>
@@ -39,7 +40,7 @@ void drawStars(Star stars[], int numStars) {
         int color = 15 * brightness;
         setcolor(color);
         setfillstyle(SOLID_FILL, color);
-        fillellipse(sx, sy, 2, 2);  // draw a small circle instead of a pixel
+        fillellipse(sx, sy, 2, 4);  // draw a small circle instead of a pixel
     }
 }
 
