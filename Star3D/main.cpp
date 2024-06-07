@@ -3,11 +3,6 @@
 #include <cmath>
 using namespace std;
 
-void getXY(int xini, int yini, float angulo, int largo, int& x, int& y) {
-    cout << xini << "::" << yini << endl;
-    x = xini + largo * cos(angulo * M_PI / 180);
-    y = yini - largo * sin(angulo * M_PI / 180);
-}
 class Point3D{
 public:
     double x;
@@ -99,46 +94,46 @@ public:
         fillellipse(s.x, s.y, 4, 4);
     }
 
-    void rotateY(int cx, int cy, int angle) {
-        a.rotateY(cx, cy, 0, angle);
-        b.rotateY(cx, cy, 0, angle);
-        c.rotateY(cx, cy, 0, angle);
-        d.rotateY(cx, cy, 0, angle);
-        e.rotateY(cx, cy, 0, angle);
+    void rotateY(int cx, int cy, int cz, int angle) {
+        a.rotateY(cx, cy, cz, angle);
+        b.rotateY(cx, cy, cz, angle);
+        c.rotateY(cx, cy, cz, angle);
+        d.rotateY(cx, cy, cz, angle);
+        e.rotateY(cx, cy, cz, angle);
 
-        o.rotateY(cx, cy, 0, angle);
-        p.rotateY(cx, cy, 0, angle);
-        q.rotateY(cx, cy, 0, angle);
-        r.rotateY(cx, cy, 0, angle);
-        s.rotateY(cx, cy, 0, angle);
+        o.rotateY(cx, cy, cz, angle);
+        p.rotateY(cx, cy, cz, angle);
+        q.rotateY(cx, cy, cz, angle);
+        r.rotateY(cx, cy, cz, angle);
+        s.rotateY(cx, cy, cz, angle);
     }
 
-    void rotateX(int cx, int cy, int angle) {
-        a.rotateX(cx, cy, 0, angle);
-        b.rotateX(cx, cy, 0, angle);
-        c.rotateX(cx, cy, 0, angle);
-        d.rotateX(cx, cy, 0, angle);
-        e.rotateX(cx, cy, 0, angle);
+    void rotateX(int cx, int cy, int cz, int angle) {
+        a.rotateX(cx, cy, cz, angle);
+        b.rotateX(cx, cy, cz, angle);
+        c.rotateX(cx, cy, cz, angle);
+        d.rotateX(cx, cy, cz, angle);
+        e.rotateX(cx, cy, cz, angle);
 
-        o.rotateX(cx, cy, 0, angle);
-        p.rotateX(cx, cy, 0, angle);
-        q.rotateX(cx, cy, 0, angle);
-        r.rotateX(cx, cy, 0, angle);
-        s.rotateX(cx, cy, 0, angle);
+        o.rotateX(cx, cy, cz, angle);
+        p.rotateX(cx, cy, cz, angle);
+        q.rotateX(cx, cy, cz, angle);
+        r.rotateX(cx, cy, cz, angle);
+        s.rotateX(cx, cy, cz, angle);
     }
 
-    void rotateZ(int cx, int cy, int angle) {
-        a.rotateZ(cx, cy, 0, angle);
-        b.rotateZ(cx, cy, 0, angle);
-        c.rotateZ(cx, cy, 0, angle);
-        d.rotateZ(cx, cy, 0, angle);
-        e.rotateZ(cx, cy, 0, angle);
+    void rotateZ(int cx, int cy, int cz, int angle) {
+        a.rotateZ(cx, cy, cz, angle);
+        b.rotateZ(cx, cy, cz, angle);
+        c.rotateZ(cx, cy, cz, angle);
+        d.rotateZ(cx, cy, cz, angle);
+        e.rotateZ(cx, cy, cz, angle);
 
-        o.rotateZ(cx, cy, 0, angle);
-        p.rotateZ(cx, cy, 0, angle);
-        q.rotateZ(cx, cy, 0, angle);
-        r.rotateZ(cx, cy, 0, angle);
-        s.rotateZ(cx, cy, 0, angle);
+        o.rotateZ(cx, cy, cz, angle);
+        p.rotateZ(cx, cy, cz, angle);
+        q.rotateZ(cx, cy, cz, angle);
+        r.rotateZ(cx, cy, cz, angle);
+        s.rotateZ(cx, cy, cz, angle);
     }
 };
 
@@ -154,7 +149,7 @@ int main() {
     while (!kbhit()) {
         cleardevice();
         uno.draw();
-        uno.rotateY(centerX, centerY, 1);
+        uno.rotateY(centerX, centerY, 0, 1);
         delay(16);
     }
     getch();
