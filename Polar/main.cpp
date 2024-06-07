@@ -33,7 +33,7 @@ public:
         int y;
         int x1;
         int y1;
-        setlinestyle(0,0,2);
+        setlinestyle(0,0,3);
         //frente
         rotate(90.0 + angle, x, y, 5.6 * scalar);
         arc(x, y, 180 + angle, 360 + angle, scalar);
@@ -119,6 +119,8 @@ public:
         rotate(180.0 + angle, x, y, 9 * scalar);
         rotate(240.0 + angle, x1, y1, 8 * scalar);
         line(x, y, x1, y1);
+
+        rotate(270.0 + angle, x, y, 10 * scalar);
     }
 };
 
@@ -133,6 +135,10 @@ int main() {
     int angle = 0;
     while (true) {
         cleardevice();
+
+        outtextxy(getmaxx() - 120, getmaxy() - 70, "Polar...");
+        outtextxy(getmaxx() - 120, getmaxy() - 50, "Rotation : A or B");
+        outtextxy(getmaxx() - 120, getmaxy() - 30, "Scalar : Q or E");
 
         if (kbhit()) {
             char key = getch();

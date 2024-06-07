@@ -1,7 +1,8 @@
-
 #include <graphics.h>
 #include <cstdlib>
 #include <ctime>
+#include <iostream>
+using namespace std;
 
 const int WIDTH = 800;
 const int HEIGHT = 600;
@@ -40,12 +41,12 @@ void drawStars(Star stars[], int numStars) {
         int color = 15 * brightness;
         setcolor(color);
         setfillstyle(SOLID_FILL, color);
-        fillellipse(sx, sy, 2, 2);  // draw a small circle instead of a pixel
+        fillellipse(sx, sy, 4, 4);
     }
 }
 
 int main() {
-    initwindow(WIDTH, HEIGHT, "Space Travel Simulation");
+    initwindow(WIDTH, HEIGHT, "Space");
 
     Star stars[NUM_STARS];
     initializeStars(stars, NUM_STARS);

@@ -146,8 +146,16 @@ int main() {
 
     StarOne uno(centerX, centerY, 200);
 
+    bool pivot = false;
+
     while (true) {
         cleardevice();
+        outtextxy(getmaxx() - 120, getmaxy() - 130, "Star...");
+        outtextxy(getmaxx() - 120, getmaxy() - 110, "Rotation : A or B");
+        outtextxy(getmaxx() - 120, getmaxy() - 90, "Rotation : W or S");
+        outtextxy(getmaxx() - 120, getmaxy() - 70, "Rotation : Q or E");
+        outtextxy(getmaxx() - 120, getmaxy() - 50, "Pause : X");
+        outtextxy(getmaxx() - 120, getmaxy() - 30, "Continue : Z");
 
         if (kbhit()) {
             char key = getch();
@@ -163,13 +171,18 @@ int main() {
                 uno.rotateZ(centerX, centerY, 0, 1);
             }else if (key == 'e' || key == 'E') {
                 uno.rotateZ(centerX, centerY, 0, -1);
+            }else if (key == 'z' || key == 'Z') {
+                pivot = true;
+            }else if (key == 'x' || key == 'X') {
+                pivot = false;
             } else {
                 closegraph();
             }
         }
 
         uno.draw();
-        uno.rotateY(centerX, centerY, 0, 1);
+        if(pivot)
+            uno.rotateY(centerX, centerY, 0, 1);
         delay(16);
     }
     getch();
