@@ -1,68 +1,82 @@
-
 #include <graphics.h>
-#include <cstdlib>
-#include <ctime>
+#include <iostream>
+#include <cmath>
+using namespace std;
+class Point3D{
+public:
+    double x;
+    double y;
+    double z;
 
-const int WIDTH = 800;
-const int HEIGHT = 600;
-const int NUM_STARS = 100;
-const float SPEED = 10.0;
+    Point3D() : x(0), y(0), z(0) {}
+    Point3D(double x, double y, double z) : x(x), y(y), z(z) {}
 
-struct Star {
-    float x, y;
-    float z;
+    // Método para rotar en el eje X
+    void rotateX(double angle) {
+        double y_new = y * cos(angle * M_PI / 180) - z * sin(angle * M_PI / 180);
+        double z_new = y * sin(angle * M_PI / 180) + z * cos(angle * M_PI / 180);
+        y = y_new;
+        z = z_new;
+    }
+
+    // Método para rotar en el eje Y
+    void rotateY(double angle) {
+        double x_new = x * cos(angle * M_PI / 180) + z * sin(angle * M_PI / 180);
+        double z_new = -x * sin(angle * M_PI / 180) + z * cos(angle * M_PI / 180);
+        x = x_new;
+        z = z_new;
+    }
+
+    // Método para rotar en el eje Z
+    void rotateZ(double angle) {
+        double x_new = x * cos(angle * M_PI / 180) - y * sin(angle * M_PI / 180);
+        double y_new = x * sin(angle * M_PI / 180) + y * cos(angle * M_PI / 180);
+        x = x_new;
+        y = y_new;
+    }
+
+    // Método para rotar en un punto de referencia (cx, cy)
+    void rotate(double cx, double cy, double angle) {
+        // Translate to the origin
+        x -= cx;
+        y -= cy;
+
+        // Perform rotation
+        rotateY(angle);
+
+        // Translate back
+        x += cx;
+        y += cy;
+    }
 };
 
-void initializeStars(Star stars[], int numStars) {
-    for (int i = 0; i < numStars; ++i) {
-        stars[i].x = (rand() % WIDTH) - WIDTH / 2;
-        stars[i].y = (rand() % HEIGHT) - HEIGHT / 2;
-        stars[i].z = rand() % WIDTH;
-    }
-}
-
-void updateStars(Star stars[], int numStars, float speed) {
-    for (int i = 0; i < numStars; ++i) {
-        stars[i].z -= speed;
-        if (stars[i].z < 1) {
-            stars[i].x = (rand() % WIDTH) - WIDTH / 2;
-            stars[i].y = (rand() % HEIGHT) - HEIGHT / 2;
-            stars[i].z = WIDTH;
-        }
-    }
-}
-
-void drawStars(Star stars[], int numStars) {
-    for (int i = 0; i < numStars; ++i) {
-        float sx = stars[i].x / stars[i].z * WIDTH + WIDTH / 2;
-        float sy = stars[i].y / stars[i].z * HEIGHT + HEIGHT / 2;
-        float brightness = 1 - stars[i].z / WIDTH;
-        int color = 15 * brightness;
-        setcolor(color);
-        setfillstyle(SOLID_FILL, color);
-        fillellipse(sx, sy, 2, 4);  // draw a small circle instead of a pixel
-    }
-}
 
 int main() {
-    initwindow(WIDTH, HEIGHT, "Space Travel Simulation");
+    int gd = DETECT, gm;
+    initgraph(&gd, &gm, "");
 
-    Star stars[NUM_STARS];
-    initializeStars(stars, NUM_STARS);
+    Point3D a(100, 100, 0);
+    Point3D b(200, 100, 0);
+    Point3D c(100, 200, 0);
+    Point3D d(200, 200, 0);
 
-    while (true) {
+    while (!kbhit()) {
         cleardevice();
-
-        updateStars(stars, NUM_STARS, SPEED);
-        drawStars(stars, NUM_STARS);
-
-        delay(10);
-
-        if (kbhit()) {
-            if (getch() == 27) break; // Escape key to exit
-        }
+        line(a.x, a.y, b.x, b.y);
+        line(b.x, b.y, d.x, d.y);
+        line(c.x, c.y, d.x, d.y);
+        line(a.x, a.y, c.x, c.y);
+        a.rotate(150, 150, 1);
+        b.rotate(150, 150, 1);
+        c.rotate(150, 150, 1);
+        d.rotate(150, 150, 1);
+        delay(60);
+        line(a.x, a.y, b.x, b.y);
+        line(b.x, b.y, d.x, d.y);
+        line(c.x, c.y, d.x, d.y);
+        line(a.x, a.y, c.x, c.y);
     }
-
+    getch();
     closegraph();
     return 0;
 }

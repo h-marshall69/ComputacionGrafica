@@ -1,0 +1,6 @@
+# depslib dependency file v1.0
+1717723720 source:c:\users\marshall abadeer\desktop\computaciongrafica\cubo3d\main.cpp
+	<graphics.h>
+	<iostream>
+	<cmath>
+

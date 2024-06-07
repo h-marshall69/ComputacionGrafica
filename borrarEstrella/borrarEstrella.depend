@@ -1,6 +1,6 @@
 # depslib dependency file v1.0
-1717549069 source:c:\users\marshall abadeer\desktop\computaciongrafica\borrarestrella\main.cpp
+1717720515 source:c:\users\marshall abadeer\desktop\computaciongrafica\borrarestrella\main.cpp
 	<graphics.h>
-	<cstdlib>
-	<ctime>
+	<iostream>
+	<cmath>
 
