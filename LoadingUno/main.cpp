@@ -3,11 +3,9 @@
 #include <cmath>
 using namespace std;
 
-void getXY(int xini, int yini, float angulo, int largo, int& x, int& y) {
-    cout << xini << "::" << yini << endl;
+void getXY(int xini, int yini, float angulo, int largo, int& x, int& y) {=
     x = xini + largo * cos(angulo * M_PI / 180);
-    y = yini - largo * sin(angulo * M_PI / 180);
-    cout << x << ":" << y << endl;
+    y = yini - largo * sin(angulo * M_PI / 180);=
 }
 
 void loading(int x, int y, int r, int actual, int n, int col1 = 10, int col2 = 0) {

@@ -31,7 +31,6 @@ public:
     }
 };
 
-
 int main() {
     int gd = DETECT, gm;
     initgraph(&gd, &gm, "");
@@ -41,10 +40,12 @@ int main() {
     Point3D c(100, 200, 0);
     Point3D d(200, 200, 0);
 
-    Point3D o(110, 110, 100);
-    Point3D p(210, 110, 100);
-    Point3D q(110, 210, 100);
-    Point3D r(210, 210, 100);
+    Point3D o(100, 100, 100);
+    Point3D p(200, 100, 100);
+    Point3D q(100, 200, 100);
+    Point3D r(200, 200, 100);
+
+    int i = 0;
 
     while (!kbhit()) {
         cleardevice();
@@ -73,6 +74,19 @@ int main() {
         q.rotateY(150, 150, 0, 5);
         r.rotateY(150, 150, 0, 5);
 
+        if(i < 1) {
+            a.rotateX(150, 150, 0, 3);
+            b.rotateX(150, 150, 0, 3);
+            c.rotateX(150, 150, 0, 3);
+            d.rotateX(150, 150, 0, 3);
+
+            o.rotateX(150, 150, 0, 3);
+            p.rotateX(150, 150, 0, 3);
+            q.rotateX(150, 150, 0, 3);
+            r.rotateX(150, 150, 0, 3);
+            i++;
+        }
+
         delay(60);
 
         line(a.x, a.y, b.x, b.y);
@@ -95,3 +109,4 @@ int main() {
     closegraph();
     return 0;
 }
+

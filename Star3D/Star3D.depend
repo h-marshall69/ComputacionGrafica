@@ -1,0 +1,6 @@
+# depslib dependency file v1.0
+1717731914 source:c:\users\marshall abadeer\desktop\computaciongrafica\star3d\main.cpp
+	<graphics.h>
+	<iostream>
+	<cmath>
+

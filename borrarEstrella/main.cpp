@@ -2,80 +2,52 @@
 #include <iostream>
 #include <cmath>
 using namespace std;
-class Point3D{
+
+const double PI = 3.14159265;
+
+class Point2D {
 public:
-    double x;
-    double y;
-    double z;
+    int x;
+    int y;
 
-    Point3D() : x(0), y(0), z(0) {}
-    Point3D(double x, double y, double z) : x(x), y(y), z(z) {}
-
-    // Método para rotar en el eje X
-    void rotateX(double angle) {
-        double y_new = y * cos(angle * M_PI / 180) - z * sin(angle * M_PI / 180);
-        double z_new = y * sin(angle * M_PI / 180) + z * cos(angle * M_PI / 180);
-        y = y_new;
-        z = z_new;
-    }
-
-    // Método para rotar en el eje Y
-    void rotateY(double angle) {
-        double x_new = x * cos(angle * M_PI / 180) + z * sin(angle * M_PI / 180);
-        double z_new = -x * sin(angle * M_PI / 180) + z * cos(angle * M_PI / 180);
-        x = x_new;
-        z = z_new;
-    }
-
-    // Método para rotar en el eje Z
-    void rotateZ(double angle) {
-        double x_new = x * cos(angle * M_PI / 180) - y * sin(angle * M_PI / 180);
-        double y_new = x * sin(angle * M_PI / 180) + y * cos(angle * M_PI / 180);
-        x = x_new;
-        y = y_new;
-    }
-
-    // Método para rotar en un punto de referencia (cx, cy)
-    void rotate(double cx, double cy, double angle) {
-        // Translate to the origin
-        x -= cx;
-        y -= cy;
-
-        // Perform rotation
-        rotateY(angle);
-
-        // Translate back
-        x += cx;
-        y += cy;
-    }
+    Point2D() : x(0), y(0) {}
+    Point2D(int x, int y) : x(x), y(y) {}
 };
 
+void printPoint(const Point2D& point) {
+    cout << "(" << point.x << ", " << point.y << ")" << endl;
+}
+
+void drawPentagram(int cx, int cy, int radius) {
+    const int numVertices = 5;
+    Point2D vertices[numVertices];
+
+    // Calcula las coordenadas de los vértices del pentágono regular
+    double angle = 360.0 / numVertices;
+    cout << angle << endl;
+    for (int i = 0; i < numVertices; ++i) {
+        double theta = (angle * i) * (PI / 180.0);
+        vertices[i].x = cx + radius * cos(theta);
+        vertices[i].y = cy + radius * sin(theta);
+    }
+
+    // Dibuja el pentagrama
+    for (int i = 0; i < numVertices; ++i) {
+        printPoint(vertices[i]);
+        line(vertices[i].x, vertices[i].y, vertices[(i + 2) % numVertices].x, vertices[(i + 2) % numVertices].y);
+    }
+}
 
 int main() {
     int gd = DETECT, gm;
     initgraph(&gd, &gm, "");
 
-    Point3D a(100, 100, 0);
-    Point3D b(200, 100, 0);
-    Point3D c(100, 200, 0);
-    Point3D d(200, 200, 0);
+    int cx = 120; // Coordenada x del centro del pentagrama
+    int cy = 200; // Coordenada y del centro del pentagrama
+    int radius = 100; // Radio del pentagrama
 
-    while (!kbhit()) {
-        cleardevice();
-        line(a.x, a.y, b.x, b.y);
-        line(b.x, b.y, d.x, d.y);
-        line(c.x, c.y, d.x, d.y);
-        line(a.x, a.y, c.x, c.y);
-        a.rotate(150, 150, 1);
-        b.rotate(150, 150, 1);
-        c.rotate(150, 150, 1);
-        d.rotate(150, 150, 1);
-        delay(60);
-        line(a.x, a.y, b.x, b.y);
-        line(b.x, b.y, d.x, d.y);
-        line(c.x, c.y, d.x, d.y);
-        line(a.x, a.y, c.x, c.y);
-    }
+    drawPentagram(cx, cy, radius);
+
     getch();
     closegraph();
     return 0;
