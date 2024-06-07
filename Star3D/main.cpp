@@ -146,8 +146,28 @@ int main() {
 
     StarOne uno(centerX, centerY, 200);
 
-    while (!kbhit()) {
+    while (true) {
         cleardevice();
+
+        if (kbhit()) {
+            char key = getch();
+            if (key == 'a' || key == 'A') {
+                uno.rotateY(centerX, centerY, 0, -1);
+            } else if (key == 'd' || key == 'd') {
+                uno.rotateY(centerX, centerY, 0, 1);
+            }else if (key == 'w' || key == 'W') {
+                uno.rotateX(centerX, centerY, 0, 1);
+            }else if (key == 's' || key == 'S') {
+                uno.rotateX(centerX, centerY, 0, -1);
+            }else if (key == 'q' || key == 'Q') {
+                uno.rotateZ(centerX, centerY, 0, 1);
+            }else if (key == 'e' || key == 'E') {
+                uno.rotateZ(centerX, centerY, 0, -1);
+            } else {
+                closegraph();
+            }
+        }
+
         uno.draw();
         uno.rotateY(centerX, centerY, 0, 1);
         delay(16);

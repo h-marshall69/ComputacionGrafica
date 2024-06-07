@@ -1,7 +1,0 @@
-# depslib dependency file v1.0
-1717793353 source:c:\users\marshall abadeer\desktop\computaciongrafica\borrarestrella\main.cpp
-	<graphics.h>
-	<iostream>
-	<cmath>
-	<conio.h>
-
