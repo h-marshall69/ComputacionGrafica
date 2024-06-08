@@ -46,12 +46,11 @@ int main() {
         stars.push_back(Point3D(rand() % 2001 - 1000, rand() % 2001 - 1000, rand() % 2001 - 1000));
     }
 
-    Point3D spaceship(0, 0, -1000);
+    Point3D spaceship(0, 0, -1300);
 
     int gd = DETECT, gm;
-    initgraph(&gd, &gm, "");
-
-    cout << getmaxx() << ":" << getmaxy();
+    //initgraph(&gd, &gm, "");
+    initwindow(800,600);
 
 
     while (true) {
@@ -75,6 +74,10 @@ int main() {
         strcpy(cstrz, positionz.c_str());
         outtextxy(10, 50, cstrz);
         delete[] cstrz;
+
+        outtextxy(getmaxx() - 140, getmaxy() - 70, "Move");
+        outtextxy(getmaxx() - 150, getmaxy() - 50, "Q   W   E");
+        outtextxy(getmaxx() - 150, getmaxy() - 30, "A    S    D");
 
         for (const auto& star : stars) {
             double dx = star.x - spaceship.x;
