@@ -1,0 +1,11 @@
+# depslib dependency file v1.0
+1717808653 source:c:\users\marshall abadeer\desktop\computaciongrafica\space\main.cpp
+	<graphics.h>
+	<iostream>
+	<vector>
+	<cmath>
+	<cstdlib>
+	<ctime>
+	<conio.h>
+	<string>
+

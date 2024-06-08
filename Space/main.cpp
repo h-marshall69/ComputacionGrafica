@@ -42,7 +42,7 @@ int main() {
     srand(time(0));
 
     std::vector<Point3D> stars;
-    for (int i = 0; i < 100; ++i) {
+    for (int i = 0; i < 150; ++i) {
         stars.push_back(Point3D(rand() % 2001 - 1000, rand() % 2001 - 1000, rand() % 2001 - 1000));
     }
 
@@ -50,6 +50,9 @@ int main() {
 
     int gd = DETECT, gm;
     initgraph(&gd, &gm, "");
+
+    cout << getmaxx() << ":" << getmaxy();
+
 
     while (true) {
         cleardevice();
@@ -79,10 +82,10 @@ int main() {
             double dz = star.z - spaceship.z;
 
             if (dz > 0) {
-                int screenX = 320 + dx / (dz / 500 + 1);
-                int screenY = 240 + dy / (dz / 500 + 1);
-                int size = std::max(1, 4 - static_cast<int>(dz / 100));
-                float brightness = 1 - star.z / 1000.0;
+                int screenX = 320 + dx / (dz / 100 + 1);
+                int screenY = 240 + dy / (dz / 100 + 1);
+                int size = std::max(1, 5 - static_cast<int>(dz / 100));
+                float brightness = 1 - star.z / getmaxx();
                 int color = 15 * brightness;
                 setcolor(color);
                 fillellipse(screenX, screenY, size, size);

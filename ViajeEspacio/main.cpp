@@ -41,6 +41,7 @@ void drawStars(Star stars[], int numStars) {
         int color = 15 * brightness;
         setcolor(color);
         setfillstyle(SOLID_FILL, color);
+        //dibujar estrellas
         fillellipse(sx, sy, 4, 4);
     }
 }
