@@ -16,24 +16,21 @@ public:
 
     Point3D(double x = 0, double y = 0, double z = 0) : x(x), y(y), z(z) {}
 
-    void rotateX(double cx, double cy, double cz, double angle) {
-        double rad = angle * M_PI / 180;
-        double temp = ((y - cy) * cos(rad) - (z - cz) * sin(rad)) + cy;
-        z = ((y - cy) * sin(rad) + (z - cz) * cos(rad)) + cz;
+    void rotateX(int cx, int cy, int cz, double angle) {
+        double temp = ((y - cy)*cos(angle * M_PI / 180) - (z - cz)*sin(angle * M_PI / 180)) + cy;
+        z = ((y - cy)*sin(angle * M_PI / 180) + (z - cz)*cos(angle * M_PI / 180)) + cz;
         y = temp;
     }
 
-    void rotateY(double cx, double cy, double cz, double angle) {
-        double rad = angle * M_PI / 180;
-        double temp = ((x - cx) * cos(rad) + (z - cz) * sin(rad)) + cx;
-        z = (-(x - cx) * sin(rad) + (z - cz) * cos(rad)) + cz;
+    void rotateY(int cx, int cy, int cz, double angle) {
+        double temp = ((x - cx)*cos(angle * M_PI / 180) + (z - cz)*sin(angle * M_PI / 180)) + cx;
+        z = (-(x - cx)*sin(angle * M_PI / 180) + (z - cz)*cos(angle * M_PI / 180)) + cz;
         x = temp;
     }
 
-    void rotateZ(double cx, double cy, double cz, double angle) {
-        double rad = angle * M_PI / 180;
-        double temp = ((x - cx) * cos(rad) - (y - cy) * sin(rad)) + cx;
-        y = ((x - cx) * sin(rad) + (y - cy) * cos(rad)) + cy;
+    void rotateZ(int cx, int cy, int cz, double angle) {
+        double temp = ((x - cx)*cos(angle * M_PI / 180) - (y - cy)*sin(angle * M_PI / 180)) + cx;
+        y = ((x - cx)*sin(angle * M_PI / 180) + (y - cy)*cos(angle * M_PI / 180)) + cy;
         x = temp;
     }
 };
@@ -85,8 +82,8 @@ int main() {
             double dz = star.z - spaceship.z;
 
             if (dz > 0) {
-                int screenX = 320 + dx / (dz / 100 + 1);
-                int screenY = 240 + dy / (dz / 100 + 1);
+                int screenX = 400 + dx / (dz / 100 + 1);
+                int screenY = 300 + dy / (dz / 100 + 1);
                 int size = std::max(1, 5 - static_cast<int>(dz / 100));
                 float brightness = 1 - star.z / getmaxx();
                 int color = 15 * brightness;
@@ -109,6 +106,18 @@ int main() {
                 spaceship.y += 10;
             } else if (key == 'e' || key == 'E') {
                 spaceship.y -= 10;
+            }else if (key == 'x' || key == 'X') {
+                for (auto& star : stars) {
+                    star.rotateX(spaceship.x, spaceship.y, spaceship.z, 1);
+                }
+            }else if (key == 'y' || key == 'y') {
+                for (auto& star : stars) {
+                    star.rotateY(spaceship.x, spaceship.y, spaceship.z, 1);
+                }
+            }else if (key == 'z' || key == 'Z') {
+                for (auto& star : stars) {
+                    star.rotateZ(spaceship.x, spaceship.y, spaceship.z, 1);
+                }
             } else {
                 closegraph();
                 return 0;
