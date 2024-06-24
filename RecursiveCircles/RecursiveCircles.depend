@@ -1,0 +1,7 @@
+# depslib dependency file v1.0
+1718800297 source:c:\users\marshall abadeer\desktop\computaciongrafica\recursivecircles\main.cpp
+	<winbgim.h>
+	<iostream>
+	<cmath>
+	<time.h>
+

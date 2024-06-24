@@ -1,0 +1,7 @@
+# depslib dependency file v1.0
+1719236075 source:c:\users\marshall abadeer\desktop\computaciongrafica\fractales\thefinalboss\main.cpp
+	<winbgim.h>
+	<iostream>
+	<cmath>
+	<time.h>
+
