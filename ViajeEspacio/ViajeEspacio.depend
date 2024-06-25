@@ -1,7 +1,0 @@
-# depslib dependency file v1.0
-1717801829 source:c:\users\marshall abadeer\desktop\computaciongrafica\viajeespacio\main.cpp
-	<graphics.h>
-	<cstdlib>
-	<ctime>
-	<iostream>
-

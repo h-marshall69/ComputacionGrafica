@@ -14,7 +14,7 @@ void drawGear(int x, int y, int alfa, int r, int n, int col1) {
     int x1, y1, x2, y2, x3, y3, x4, y4;
     setcolor(col1);
     circle(x, y, r);
-    //circle(x, y, r/2);
+    circle(x, y, r/1.5);
 
     for (int i = 0; i < n; i++) {
         getXY(x, y, angulo2 + angulo / 5 + alfa, r, x1, y1);
@@ -36,7 +36,7 @@ int main() {
     int centerX = getmaxx() / 2;
     int centerY = getmaxy() / 2;
     int dientes = 8;
-    int radio = 80;
+    int radio = 100;
 
     while (!kbhit()) {
         drawGear(centerX, centerY, alfa, radio, dientes, 10);

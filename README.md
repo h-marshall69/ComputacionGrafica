@@ -1,2 +1,2 @@
 # ComputacionGrafica
-:v
+Los fractales estan en la carpeta fractales

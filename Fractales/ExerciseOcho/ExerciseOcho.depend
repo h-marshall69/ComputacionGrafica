@@ -1,0 +1,7 @@
+# depslib dependency file v1.0
+1718804711 source:c:\users\marshall abadeer\desktop\computaciongrafica\exerciseocho\main.cpp
+	<winbgim.h>
+	<iostream>
+	<cmath>
+	<time.h>
+
