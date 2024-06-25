@@ -1,8 +1,0 @@
-# depslib dependency file v1.0
-1718643663 source:c:\users\sistemas\desktop\conjuntocantor\main.cpp
-	<graphics.h>
-	<cstdlib>
-	<ctime>
-	<iostream>
-	<cmath>
-
