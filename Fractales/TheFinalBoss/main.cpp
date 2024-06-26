@@ -4,9 +4,7 @@
 using namespace std;
 
 void drawTriangle(int x, int y, int l, int n, int thickness) {
-    //setlinestyle(SOLID_LINE, 0, thickness);
     line(x, y - l, x, y);
-    //bar(x - thickness, y - l, x + thickness, y);
     line(x, y, x - l, y + l / 2);
     line(x, y, x + l, y + l / 2);
     if (n > 0) {
@@ -15,7 +13,6 @@ void drawTriangle(int x, int y, int l, int n, int thickness) {
         drawTriangle(x + l, y + l / 2, l / 2, n - 1, thickness - 2);
     }
 }
-
 
 int main() {
     initwindow(800, 600);

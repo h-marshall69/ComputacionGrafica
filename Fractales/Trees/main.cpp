@@ -1,44 +1,32 @@
-#include <winbgim.h>
 #include <iostream>
-#include <cmath>
-#include <time.h>
+#include <winbgim.h>
+#include <math.h>
 using namespace std;
-/*
-void rotateZ(int cx, int cy, double angle) {
-    double temp = ((x - cx)*cos(angle * M_PI / 180) - (y - cy)*sin(angle * M_PI / 180)) + cx;
-    y = ((x - cx)*sin(angle * M_PI / 180) + (y - cy)*cos(angle * M_PI / 180)) + cy;
-    x = temp;
-}*/
-void rotate(int& x1, int& y1, int angle) {
-    int temp = (x * cos(angle * M_PI / 180)) - (y * sin(angle * M_PI / 180));
-    y = (x * sin(angle * M_PI / 180)) + (y * cos(angle * M_PI / 180));
-    x = temp;
+
+void getXY(int xini, int yini, float angulo, int largo, int& x, int& y) {
+    x = xini + largo * sin(angulo * M_PI / 180);
+    y = yini - largo * cos(angulo * M_PI / 180);
 }
 
-void tree(int x1, int y1, int x2, int y2) {
-    line(x1, y1, x2, y2);
-    int dy = y2 - y1;
-    if(y2 > 100) {
-        tree(x1, y2, x2, y2 + dy/3);
+void Arbol(int x, int y, int l, double angulo, int n) {
+    int x2;
+    int y2;
+    getXY(x, y, angulo, l, x2, y2);
+    line(x, y, x2, y2);
+
+    if(n > 0) {
+        Arbol(x2, y2, l * 2 / 3, angulo + 45, n - 1);
+        Arbol(x2, y2, l * 2 / 3, angulo - 45, n - 1);
     }
 }
+
 int main() {
-    initwindow(800,600);
+    initwindow(800, 600);
+    int large = 200;
 
-    srand(time(NULL));
+    Arbol(getmaxx() / 2, getmaxy(), large, 0, 10);
 
-    //tree(getmaxx()/2,getmaxy(), getmaxx()/2, getmaxy() - 100);
-
-    int x = 400;
-    int y = 400;
-
-    //circle(x, y, 5);
-    rotate(x, y, 30);
-    circle(x, y, 5);
-    cout<<x<<y;
-
-    getch();  // Wait for a key press
-    closegraph();  // Close the graphics mode
-
+    getch();
+    closegraph();
     return 0;
 }
