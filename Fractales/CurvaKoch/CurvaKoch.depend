@@ -1,0 +1,8 @@
+# depslib dependency file v1.0
+1718795799 source:c:\users\marshall abadeer\desktop\computaciongrafica\fractales\curvakoch\main.cpp
+	<graphics.h>
+	<cstdlib>
+	<ctime>
+	<iostream>
+	<cmath>
+
