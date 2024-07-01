@@ -43,8 +43,8 @@ int main() {
     int height = 600;
     initwindow(width, height);
 
-    int length = 400; // Longitud inicial del lado del triángulo
-    int depth = 1;    // Profundidad del fractal
+    int length = 400;
+    int depth = 4;
 
     drawSnowflake(width / 2, height / 2, length, depth);
 

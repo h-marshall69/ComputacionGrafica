@@ -21,8 +21,6 @@ void nose(int x1, int y1, int x2, int y2, int n){
         int x5 = x1 + 2 * dx / 3;
         int y5 = y1 + 2 * dy / 3;
 
-        //int x4 = ((x5 - x3)*cos(M_PI / 3) - (y5 - y3)*sin(M_PI / 3)) + x3;
-        //int y4 = ((x5 - x3)*sin(M_PI / 3) + (y5 - y3)*cos(M_PI / 3)) + y3;
         int x4 = ((x5 - x3)*cos(M_PI / 3) - (y3 - y5)*sin(M_PI / 3)) + x3;
         int y4 = ((x3 - x5)*sin(M_PI / 3) + (y5 - y3)*cos(M_PI / 3)) + y3;
 
@@ -36,21 +34,16 @@ void nose(int x1, int y1, int x2, int y2, int n){
 void drawKochLine(int x, int y, int l, int n) {
     int x2, y2;
     getXY(x - l, y + l, x2, y2, l*2, 30);
-    nose(x + l, y - l,x - l, y - l,  n);
-
-    nose(x2, y2 + l,x - l, y - l, n);
-    nose(x + l, y - l,x2, y2 + l, n);
-    //nose(x - l, y + l, x + l, y + l, n);
-    //line(x - l, y + l, x2, y2);
-    //nose(x, y, x2, y2, n);
-
+    nose(x + l, y + l/2,x - l, y + l/2,  n);
+    nose(x - l, y + l/2, x2, y2 -l/2, n);
+    nose(x2, y2 - l/2, x + l, y + l/2, n);
 }
 
 int main() {
     initwindow(800, 600);
 
-    int length = 250;
-    int depth = 2;
+    int length = 200;
+    int depth = 4;
     line(getmaxx()/2, 0, getmaxx()/2, getmaxy());
 
     drawKochLine(getmaxx()/2, getmaxy()/2, length, depth);

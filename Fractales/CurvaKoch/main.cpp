@@ -36,7 +36,7 @@ int main() {
     int gd = DETECT, gm;
     initgraph(&gd, &gm, "");
 
-    int depth = 4; // Profundidad de la curva de Koch
+    int depth = 2; // Profundidad de la curva de Koch
 
     // Coordenadas iniciales para la línea base de la curva de Koch
     int x1 = 100, y1 = 300;

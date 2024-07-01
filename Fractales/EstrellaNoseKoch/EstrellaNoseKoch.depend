@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1719767957 source:c:\users\marshall abadeer\desktop\computaciongrafica\fractales\estrellanosekoch\main.cpp
+1719781735 source:c:\users\marshall abadeer\desktop\computaciongrafica\fractales\estrellanosekoch\main.cpp
 	<iostream>
 	<winbgim.h>
 	<math.h>
