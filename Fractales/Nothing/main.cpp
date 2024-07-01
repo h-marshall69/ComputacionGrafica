@@ -75,6 +75,7 @@ void draw(int x1, int y1, int x8, int y8, int n, int val) {
 void nothing(int x, int y, int l, int n) {
     draw(x - l, y + l/2, x + l, y + l/2, n, true);
 }
+
 int main() {
     initwindow(800, 600);
 
