@@ -1,0 +1,5 @@
+# depslib dependency file v1.0
+1720002030 source:c:\users\marshall abadeer\desktop\computaciongrafica\fractales\hilbert\main.cpp
+	<iostream>
+	<winbgim.h>
+

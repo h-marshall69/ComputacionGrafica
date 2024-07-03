@@ -1,0 +1,6 @@
+# depslib dependency file v1.0
+1719998096 source:c:\users\marshall abadeer\desktop\computaciongrafica\fractales\fractalvicsekdos\main.cpp
+	<iostream>
+	<winbgim.h>
+	<math.h>
+
