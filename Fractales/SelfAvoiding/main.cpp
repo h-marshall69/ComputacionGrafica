@@ -80,7 +80,7 @@ int main() {
     initwindow(800, 600);
 
     int length = 250;
-    int depth = 3;
+    int depth = 0;
 
     nothing(getmaxx()/2, getmaxy()/2, length, depth);
 
