@@ -1,0 +1,15 @@
+REQUISITOS
+
+node --version
+v20.16.0
+
+npm --version
+10.8.1
+
+EJECUTAR LAS SIGUIENTES LINEAS EN LA TERMINAL
+
+# three.js
+npm install --save three
+
+# vite
+npm install --save-dev vite
